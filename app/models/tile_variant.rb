@@ -1,0 +1,531 @@
+class TileVariant < ActiveHash::Base
+    self.data = [
+        {
+            id: 'northern_city',
+            count: 5,
+            build_edges_proc: lambda do |edges|
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH
+                )
+
+                field_region = FieldRegion.new
+                [Orientation::EAST, Orientation::SOUTH, Orientation::WEST].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation,
+                        field_region: field_region
+                    )
+                end
+            end
+        }, {
+            id: 'single_east_west_city',
+            count: 1,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new
+                [Orientation::EAST, Orientation::WEST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation
+                    )
+                end
+            end
+        }, {
+            id: 'single_north_east_city',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new
+                [Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                field_region = FieldRegion.new
+                [Orientation::SOUTH, Orientation::WEST].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation,
+                        field_region: field_region
+                    )
+                end
+            end
+        }, {
+            id: 'two_north_south_cities',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation
+                    )
+                end
+
+                field_region = FieldRegion.new
+                [Orientation::EAST, Orientation::WEST].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation,
+                        field_region: field_region
+                    )
+                end
+            end
+        }, {
+            id: 'two_north_east_cities',
+            count: 2,
+            build_edges_proc: lambda do |edges|
+                [Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation
+                    )
+                end
+
+                field_region = FieldRegion.new
+                [Orientation::SOUTH, Orientation::WEST].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation,
+                        field_region: field_region
+                    )
+                end
+            end
+        }, {
+            id: 'single_east_west_city_with_shield',
+            count: 2,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+                [Orientation::EAST, Orientation::WEST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation
+                    )
+                end
+            end
+        }, {
+            id: 'single_north_east_city_with_shield',
+            count: 2,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+                [Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                field_region = FieldRegion.new
+                [Orientation::SOUTH, Orientation::WEST].each do |orientation|
+                    edges << FieldEdge.new(
+                        orientation: orientation,
+                        field_region: field_region
+                    )
+                end
+            end
+        }, {
+            id: 'single_west_north_east_city',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new
+                [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH
+                )
+            end
+        }, {
+            id: 'single_west_north_east_city_with_shield',
+            count: 1,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+                [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH
+                )
+            end
+        }, {
+            id: 'single_all_sides_city_with_shield',
+            count: 1,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+                Orientation.all.each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+            end
+        }, {
+            id: 'straight_road',
+            count: 8,
+            build_edges_proc: lambda do |edges|
+                north_field_region = FieldRegion.new
+                south_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::NORTH,
+                    field_region: north_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: north_field_region,
+                    right_field_region: south_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH,
+                    field_region: south_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: south_field_region,
+                    right_field_region: north_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'corner_road',
+            count: 9,
+            build_edges_proc: lambda do |edges|
+                northeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::NORTH,
+                    field_region: northeast_field_region
+                )
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::EAST,
+                    field_region: northeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: northeast_field_region,
+                    right_field_region: southwest_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: northeast_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'northern_city_with_straight_road',
+            count: 4,
+            build_edges_proc: lambda do |edges|
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH
+                )
+
+                north_field_region = FieldRegion.new
+                south_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: north_field_region,
+                    right_field_region: south_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH,
+                    field_region: south_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: south_field_region,
+                    right_field_region: north_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'northern_city_with_southwest_corner_road',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH
+                )
+
+                northeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::EAST,
+                    field_region: northeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: northeast_field_region,
+                    right_field_region: southwest_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: northeast_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'northern_city_with_southeast_corner_road',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH
+                )
+
+                northwest_field_region = FieldRegion.new
+                southeast_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: northwest_field_region,
+                    right_field_region: southeast_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: southeast_field_region,
+                    right_field_region: northwest_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::WEST,
+                    field_region: northwest_field_region
+                )
+            end
+        }, {
+            id: 'single_west_north_east_city_with_road',
+            count: 1,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new
+
+                [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH
+                )
+            end
+        }, {
+            id: 'single_west_north_east_city_with_shield_and_road',
+            count: 2,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+
+                [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH
+                )
+            end
+        }, {
+            id: 'single_north_east_city_with_corner_road',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new
+                northeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                [Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: northeast_field_region,
+                    right_field_region: southwest_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: northeast_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'single_north_east_city_with_shield_and_corner_road',
+            count: 2,
+            build_edges_proc: lambda do |edges|
+                city_region = CityRegion.new(shield: true)
+                northeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+                road_segment = RoadSegment.new
+
+                [Orientation::NORTH, Orientation::EAST].each do |orientation|
+                    edges << CityEdge.new(
+                        orientation: orientation,
+                        city_region: city_region
+                    )
+                end
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: northeast_field_region,
+                    right_field_region: southwest_field_region,
+                    road_segment: road_segment
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: northeast_field_region,
+                    road_segment: road_segment
+                )
+            end
+        }, {
+            id: 'three_roads',
+            count: 4,
+            build_edges_proc: lambda do |edges|
+                north_field_region = FieldRegion.new
+                southeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+
+                edges << FieldEdge.new(
+                    orientation: Orientation::NORTH,
+                    field_region: north_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: north_field_region,
+                    right_field_region: southeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: southeast_field_region,
+                    right_field_region: southwest_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: north_field_region
+                )
+            end
+        }, {
+            id: 'city_with_three_roads',
+            count: 3,
+            build_edges_proc: lambda do |edges|
+                north_field_region = FieldRegion.new
+                southeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: north_field_region,
+                    right_field_region: southeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: southeast_field_region,
+                    right_field_region: southwest_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: north_field_region
+                )
+            end
+        }, {
+            id: 'four_roads',
+            count: 1,
+            build_edges_proc: lambda do |edges|
+                northwest_field_region = FieldRegion.new
+                northeast_field_region = FieldRegion.new
+                southeast_field_region = FieldRegion.new
+                southwest_field_region = FieldRegion.new
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::NORTH,
+                    left_field_region: northwest_field_region,
+                    right_field_region: northeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::EAST,
+                    left_field_region: northeast_field_region,
+                    right_field_region: southeast_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::SOUTH,
+                    left_field_region: southeast_field_region,
+                    right_field_region: southwest_field_region
+                )
+
+                edges << RoadEdge.new(
+                    orientation: Orientation::WEST,
+                    left_field_region: southwest_field_region,
+                    right_field_region: northwest_field_region
+                )
+            end
+        }
+    ]
+
+    def build(tile)
+        tile.edges = [].tap { |edges| self.build_edges_proc.call(edges) }
+    end
+
+    def self.for_deck
+        all.flat_map { |variant| Array.new(variant.count) { variant } }
+    end
+
+end
