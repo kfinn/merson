@@ -1,4 +1,6 @@
 class TileVariant < ActiveHash::Base
+    include ActiveHash::Enum
+    enum_accessor :id
     self.data = [
         {
             id: 'northern_city',
@@ -238,7 +240,7 @@ class TileVariant < ActiveHash::Base
             end
         }, {
             id: 'northern_city_with_straight_road',
-            count: 4,
+            count: 3,
             build_edges_proc: lambda do |edges|
                 edges << CityEdge.new(
                     orientation: Orientation::NORTH
@@ -528,4 +530,7 @@ class TileVariant < ActiveHash::Base
         all.flat_map { |variant| Array.new(variant.count) { variant } }
     end
 
+    def self.starting_tile_variant
+        NORTHERN_CITY_WITH_STRAIGHT_ROAD
+    end
 end

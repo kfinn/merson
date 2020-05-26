@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_204023) do
+ActiveRecord::Schema.define(version: 2020_05_26_210113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,24 @@ ActiveRecord::Schema.define(version: 2020_05_26_204023) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "games", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "started_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key"], name: "index_games_on_key"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name"
+    t.bigint "game_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_players_on_game_id"
+    t.index ["user_id"], name: "index_players_on_user_id"
+  end
+
   create_table "road_segments", force: :cascade do |t|
     t.bigint "road_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -84,8 +102,14 @@ ActiveRecord::Schema.define(version: 2020_05_26_204023) do
     t.string "tile_variant_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "game_id", null: false
+    t.integer "ordering", null: false
+    t.integer "x"
+    t.integer "y"
+    t.index ["game_id"], name: "index_tiles_on_game_id"
     t.index ["orientation_id"], name: "index_tiles_on_orientation_id"
     t.index ["tile_variant_id"], name: "index_tiles_on_tile_variant_id"
+    t.index ["x", "y", "game_id"], name: "index_tiles_on_x_and_y_and_game_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -108,6 +132,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_204023) do
     t.datetime "locked_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "guest", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -121,5 +146,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_204023) do
   add_foreign_key "edges", "road_segments"
   add_foreign_key "edges", "tiles"
   add_foreign_key "field_regions", "fields"
+  add_foreign_key "players", "games"
+  add_foreign_key "players", "users"
   add_foreign_key "road_segments", "roads"
+  add_foreign_key "tiles", "games"
 end
