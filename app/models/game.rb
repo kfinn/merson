@@ -3,6 +3,7 @@ class Game < ApplicationRecord
 
     has_many :tiles
     has_many :played_tiles, -> { played }, class_name: 'Tile'
+    has_one :next_tile, -> { upcoming }, class_name: 'Tile'
 
     before_validation :generate!, on: :create
 

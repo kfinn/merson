@@ -1,10 +1,1 @@
-<h1>Game <%= @game.id %></h1>
-
-<ul>
-    <% @game.played_tiles.each do |played_tile| %>
-        <li>
-            <%= played_tile.tile_variant.id %>
-            <%= played_tile.x %>, <%= played_tile.y %>
-        </li>
-    <% end %>
-</ul>
+<%= react_component("Game", game: render_json_partial(@game)) %>

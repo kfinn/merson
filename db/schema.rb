@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_210113) do
+ActiveRecord::Schema.define(version: 2020_05_26_222413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_210113) do
   end
 
   create_table "tiles", force: :cascade do |t|
-    t.string "orientation_id"
+    t.string "orientation_id", default: "north", null: false
     t.string "tile_variant_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

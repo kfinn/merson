@@ -1,6 +1,5 @@
 class CityEdge < Edge
-    belongs_to :city_region
-
+    validates :city_region, presence: true
     before_validation :generate_city_region, on: :create
 
     private
