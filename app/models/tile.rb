@@ -1,8 +1,8 @@
 class Tile < ApplicationRecord
     has_many :edges
-    has_many :field_regions, through: :edges
-    has_many :city_regions, through: :edges
-    has_many :road_segments, through: :edges
+    has_many :field_regions, -> { distinct }, through: :edges
+    has_many :city_regions, -> { distinct }, through: :edges
+    has_many :road_segments, -> { distinct }, through: :edges
 
     belongs_to_active_hash :orientation
     belongs_to_active_hash :tile_variant
