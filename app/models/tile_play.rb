@@ -1,0 +1,49 @@
+class TilePlay
+    include ActiveModel::Model
+
+    attr_accessor :tile, :x, :y, :orientation_id
+
+    validate :edge_pairs_must_be_valid
+    validate :must_have_some_neighbor
+
+    def save!
+        tile.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
+            update_tile!
+            edge_pairs.each(&:save!)
+        end
+    end
+
+    private
+
+    def update_tile!
+        tile.update! x: x, y: y, orientation: orientation
+    end
+
+    def edge_pairs
+        @edge_pairs ||= Orientation.all.map do |neighbor_orientation|
+            neighboring_tile = tile.game.tiles.find_by(x: x + neighbor_orientation.dx, y: y + neighbor_orientation.dy)
+            next unless neighboring_tile.present?
+
+            older_edge = neighboring_tile.edge_with_absolute_orientation(-neighbor_orientation)
+            newer_edge = tile.edge_with_absolute_orientation(neighbor_orientation - orientation)
+
+            EdgePair.new(
+                older_edge: older_edge,
+                newer_edge: newer_edge
+            )
+        end.compact
+    end
+
+    def edge_pairs_must_be_valid
+        errors[:base] << 'all edges must match existing tiles' unless edge_pairs.all?(&:valid?)
+    end
+
+    def must_have_some_neighbor
+        errors[:base] << 'must have at least one neighbor' unless edge_pairs.any?
+    end
+
+    def orientation
+        @orientation ||= Orientation.find orientation_id
+    end
+end

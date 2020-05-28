@@ -1,4 +1,6 @@
 class Tile < ApplicationRecord
+    belongs_to :game
+
     has_many :edges
     has_many :field_regions, -> { distinct }, through: :edges
     has_many :city_regions, -> { distinct }, through: :edges
@@ -9,6 +11,7 @@ class Tile < ApplicationRecord
 
     validate :must_have_four_edges
     validate :x_and_y_must_be_mutually_present
+    validates :orientation, inclusion: { in: Orientation.all }
 
     scope :played, -> { where.not(x: nil, y: nil) }
     scope :unplayed, -> { where(x: nil, y: nil) }
@@ -17,6 +20,10 @@ class Tile < ApplicationRecord
     def tile_variant=(tile_variant)
         self.tile_variant_id=tile_variant.id
         tile_variant.build self if tile_variant.present?
+    end
+
+    def edge_with_absolute_orientation(orientation)
+        edges.find_by!(orientation_id: (orientation - self.orientation).id)
     end
 
     private

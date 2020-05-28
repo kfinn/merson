@@ -6,6 +6,7 @@ import { Point } from '../models/Point';
 import { RecoilRoot } from 'recoil';
 
 export interface Game {
+    id: number
     playedTiles: PlayedTile[]
     nextTile: Tile
     availableNextTilePositions: Point[]

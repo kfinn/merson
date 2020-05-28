@@ -8,7 +8,9 @@ import NextTileSvg from './NextTileSvg';
 
 const BORDER_RADIUS = 100
 
-export default function BoardSvg({ game: { playedTiles, nextTile, availableNextTilePositions } }: { game: Game }) {
+export default function BoardSvg({ game }: { game: Game }) {
+    const { playedTiles, availableNextTilePositions } = game
+
     const xCoordinates = _.map(playedTiles, 'x')
     const yCoordinates = _.map(playedTiles, 'y')
 
@@ -36,7 +38,7 @@ export default function BoardSvg({ game: { playedTiles, nextTile, availableNextT
                     <AvailableNextTilePositionSvg position={position} key={`${position.x} ${position.y}`} />
                 ))
             }
-            <NextTileSvg nextTile={nextTile} />
+            <NextTileSvg game={game} />
         </svg>
     </React.Fragment>
 }

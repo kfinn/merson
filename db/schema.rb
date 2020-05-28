@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_222413) do
+ActiveRecord::Schema.define(version: 2020_05_28_211744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,22 @@ ActiveRecord::Schema.define(version: 2020_05_26_222413) do
     t.index ["edge_id", "left_of_road"], name: "index_edge_field_regions_on_edge_id_and_left_of_road", unique: true
     t.index ["edge_id"], name: "index_edge_field_regions_on_edge_id"
     t.index ["field_region_id"], name: "index_edge_field_regions_on_field_region_id"
+  end
+
+  create_table "edge_pair_members", force: :cascade do |t|
+    t.bigint "edge_pair_id"
+    t.bigint "edge_id"
+    t.boolean "older", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["edge_id"], name: "index_edge_pair_members_on_edge_id", unique: true
+    t.index ["edge_pair_id", "older"], name: "index_edge_pair_members_on_edge_pair_id_and_older", unique: true
+    t.index ["edge_pair_id"], name: "index_edge_pair_members_on_edge_pair_id"
+  end
+
+  create_table "edge_pairs", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "edges", force: :cascade do |t|
@@ -142,6 +158,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_222413) do
   add_foreign_key "city_regions", "cities"
   add_foreign_key "edge_field_regions", "edges"
   add_foreign_key "edge_field_regions", "field_regions"
+  add_foreign_key "edge_pair_members", "edge_pairs"
+  add_foreign_key "edge_pair_members", "edges"
   add_foreign_key "edges", "city_regions"
   add_foreign_key "edges", "road_segments"
   add_foreign_key "edges", "tiles"

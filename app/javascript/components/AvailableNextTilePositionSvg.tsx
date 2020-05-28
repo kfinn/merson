@@ -15,5 +15,6 @@ export default function AvailableNextTilePositionSvg({ position }: { position: P
         transform={`translate(${position.x * TILE_SIZE}, ${position.y * TILE_SIZE})`}
         fill="lightgray"
         onClick={() => { setSelectedAvailableNextTilePosition(position) }}
+        className="available-next-tile-position"
     />
 }

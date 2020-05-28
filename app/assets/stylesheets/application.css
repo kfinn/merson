@@ -19,6 +19,10 @@
      max-height: 600px;
  }
 
+ .available-next-tile-position {
+     cursor: pointer;
+ }
+
  .next-tile-container {
      transition: transform 100ms;
  }
@@ -33,7 +37,7 @@
     }
 }
 
-
  .next-tile-contents {
      animation: tile-pending-play 1s infinite ease-in-out alternate;
+     cursor: pointer;
  }
