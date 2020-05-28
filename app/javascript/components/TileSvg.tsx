@@ -1,7 +1,6 @@
 import React from 'react';
 import { Edge } from '../models/Edge';
 import { Orientation } from '../models/Orientation';
-import { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
 import TileCityRegionsSvg from './TileCityRegionsSvg';
 import { CityRegion } from './TileCityRegionSvg';
 import TileFieldRegionsSvg from './TileFieldRegionsSvg';
@@ -28,7 +27,6 @@ export interface RoadSegment {
 export default function TileSvg({ tile }: { tile: Tile }) {
     return (
         <React.Fragment>
-            <rect x={-TILE_RADIUS} y={-TILE_RADIUS} width={TILE_SIZE} height={TILE_SIZE} />
             <TileCityRegionsSvg cityRegions={tile.cityRegions}>
                 <TileRoadSegmentsSvg roadSegments={tile.roadSegments}>
                     <TileFieldRegionsSvg fieldRegions={tile.fieldRegions} />

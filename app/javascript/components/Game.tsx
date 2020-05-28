@@ -3,6 +3,7 @@ import BoardSvg from './BoardSvg';
 import { PlayedTile } from './PlayedTileSvg';
 import { Tile } from './TileSvg';
 import { Point } from '../models/Point';
+import { RecoilRoot } from 'recoil';
 
 export interface Game {
     playedTiles: PlayedTile[]
@@ -11,5 +12,7 @@ export interface Game {
 }
 
 export default function Game({ game }: { game: Game }) {
-    return <BoardSvg playedTiles={game.playedTiles} availableNextTilePositions={game.availableNextTilePositions} />
+    return <RecoilRoot>
+        <BoardSvg game={game} />
+    </RecoilRoot>
 }

@@ -18,3 +18,22 @@
  .board {
      max-height: 600px;
  }
+
+ .next-tile-container {
+     transition: transform 100ms;
+ }
+
+@keyframes tile-pending-play {
+    from {
+        transform: scale(0.8);
+    }
+
+    to {
+        transform: scale(0.9);
+    }
+}
+
+
+ .next-tile-contents {
+     animation: tile-pending-play 1s infinite ease-in-out alternate;
+ }
