@@ -1,10 +1,11 @@
 import React from 'react';
-import TileCityRegionsSvg from './TileCityRegionsSvg';
-import TileConstrainedByCityRegionsSvg from './TileConstrainedByCityRegionsSvg';
-import { TILE_SIZE } from './PlayedTileSvg';
-import { CityRegion } from './TileCityRegionSvg';
 import { Edge } from '../models/Edge';
 import { Orientation } from '../models/Orientation';
+import { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
+import TileCityRegionsSvg from './TileCityRegionsSvg';
+import { CityRegion } from './TileCityRegionSvg';
+import TileFieldRegionsSvg from './TileFieldRegionsSvg';
+import TileRoadSegmentsSvg from './TileRoadSegmentsSvg';
 
 export interface Tile {
     id: number
@@ -14,12 +15,12 @@ export interface Tile {
     roadSegments: RoadSegment[]
 }
 
-interface FieldRegion {
+export interface FieldRegion {
     id: number
     edges: Edge[]
 }
 
-interface RoadSegment {
+export interface RoadSegment {
     id: number
     edges: Edge[]
 }
@@ -27,9 +28,11 @@ interface RoadSegment {
 export default function TileSvg({ tile }: { tile: Tile }) {
     return (
         <React.Fragment>
-            <rect x={-TILE_SIZE / 2} y={-TILE_SIZE / 2} width={TILE_SIZE} height={TILE_SIZE} />
+            <rect x={-TILE_RADIUS} y={-TILE_RADIUS} width={TILE_SIZE} height={TILE_SIZE} />
             <TileCityRegionsSvg cityRegions={tile.cityRegions}>
-                <TileConstrainedByCityRegionsSvg tile={tile} />
+                <TileRoadSegmentsSvg roadSegments={tile.roadSegments}>
+                    <TileFieldRegionsSvg fieldRegions={tile.fieldRegions} />
+                </TileRoadSegmentsSvg>
             </TileCityRegionsSvg>
         </React.Fragment>
     )

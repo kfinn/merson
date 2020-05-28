@@ -36,3 +36,14 @@ export function edgeCorners({ orientation }: Edge): EdgeCorners {
 export function edgeOrdering({ orientation }: Edge) {
     return orientationOrdering(orientation)
 }
+
+const EDGE_CENTERS_BY_ORIENTATION_ID = {
+    [OrientationId.NORTH]: { x: 0, y: -0.5 },
+    [OrientationId.EAST]: { x: 0.5, y: 0 },
+    [OrientationId.SOUTH]: { x: 0, y: 0.5 },
+    [OrientationId.WEST]: { x: -0.5, y: 0 },
+}
+
+export function edgeCenter({ orientation }: Edge): Point {
+    return EDGE_CENTERS_BY_ORIENTATION_ID[orientation.id]
+}

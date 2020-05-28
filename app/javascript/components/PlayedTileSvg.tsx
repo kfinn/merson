@@ -8,6 +8,7 @@ export interface PlayedTile extends Tile {
 }
 
 export const TILE_SIZE = 100
+export const TILE_RADIUS = TILE_SIZE / 2
 
 export function transformForOrientation({ id }: Orientation) {
     switch (id) {

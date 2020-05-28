@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import PlayedTileSvg, { PlayedTile, TILE_SIZE } from './PlayedTileSvg';
+import PlayedTileSvg, { PlayedTile, TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
 
 const BORDER_RADIUS = 100
 
@@ -8,11 +8,11 @@ export default function BoardSvg({ playedTiles }: { playedTiles: PlayedTile[] })
     const xCoordinates = _.map(playedTiles, 'x')
     const yCoordinates = _.map(playedTiles, 'y')
 
-    const xMin = _.min(xCoordinates) * TILE_SIZE - (TILE_SIZE / 2)
-    const yMin = _.min(yCoordinates) * TILE_SIZE - (TILE_SIZE / 2)
+    const xMin = _.min(xCoordinates) * TILE_SIZE - TILE_RADIUS
+    const yMin = _.min(yCoordinates) * TILE_SIZE - TILE_RADIUS
 
-    const xMax = _.max(xCoordinates) * TILE_SIZE + (TILE_SIZE / 2)
-    const yMax = _.max(yCoordinates) * TILE_SIZE + (TILE_SIZE / 2)
+    const xMax = _.max(xCoordinates) * TILE_SIZE + TILE_RADIUS
+    const yMax = _.max(yCoordinates) * TILE_SIZE + TILE_RADIUS
 
     const width = xMax - xMin + (BORDER_RADIUS * 2)
     const height = yMax - yMin + (BORDER_RADIUS * 2)
