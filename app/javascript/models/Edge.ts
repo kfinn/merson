@@ -1,4 +1,5 @@
 import { Orientation, OrientationId, orientationOrdering } from "./Orientation";
+import { Point } from "./Point";
 
 export interface Edge {
     id: number
@@ -17,11 +18,6 @@ const EDGE_CORNERS_BY_ORIENTATION_ID = {
     [OrientationId.EAST]: { start: { x: 0.5, y: -0.5 }, end: { x: 0.5, y: 0.5 } },
     [OrientationId.SOUTH]: { start: { x: 0.5, y: 0.5 }, end: { x: -0.5, y: 0.5 } },
     [OrientationId.WEST]: { start: { x: -0.5, y: 0.5 }, end: { x: -0.5, y: -0.5 } },
-}
-
-export interface Point {
-    x: number,
-    y: number
 }
 
 export interface EdgeCorners {

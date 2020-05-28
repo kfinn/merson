@@ -13,3 +13,7 @@ end
 json.next_tile do
     json.partial! game.next_tile
 end
+
+json.available_next_tile_positions game.available_next_tile_positions do |position|
+    json.(position, :x, :y)
+end

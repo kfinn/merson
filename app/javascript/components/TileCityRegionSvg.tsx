@@ -1,6 +1,7 @@
-import React from 'react';
-import { Edge, edgeOrdering, edgeCorners, Point, EdgeCorners } from '../models/Edge';
 import _ from 'lodash';
+import React from 'react';
+import { Edge, edgeCorners, EdgeCorners, edgeOrdering } from '../models/Edge';
+import { Point } from '../models/Point';
 import { TILE_SIZE } from './PlayedTileSvg';
 
 export interface CityRegion {
