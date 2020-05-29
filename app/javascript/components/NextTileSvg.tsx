@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import selectedAvailableNextTilePosition from '../models/selectedAvailableNextTilePosition';
+import selectedNextTileOrientationId from '../models/selectedNextTileOrientationId';
 import TileSvg from "./TileSvg";
-import { TILE_SIZE } from './PlayedTileSvg';
+import { TILE_SIZE, TILE_RADIUS, transformForOrientation } from './PlayedTileSvg';
 import Api from '../models/Api';
 import { Game } from './Game';
+import { OrientationId, orientationNextOrientation, orientationPreviousOrientation } from '../models/Orientation';
 
 export default function NextTileSvg({ game }: { game: Game }) {
-    const [selectedNextTilePosition, setSelectedNextTilePosition] = useRecoilState(selectedAvailableNextTilePosition)
+    const [nextTilePosition, setNextTilePosition] = useRecoilState(selectedAvailableNextTilePosition)
+    const [nextTileOrientationId, setNextTileOrientationId] = useRecoilState(selectedNextTileOrientationId)
 
     useEffect(() => {
-        setSelectedNextTilePosition(null)
+        setNextTilePosition(null)
+        setNextTileOrientationId(OrientationId.NORTH)
     }, [game.nextTile.id])
 
     const onClick = () => {
@@ -20,8 +24,8 @@ export default function NextTileSvg({ game }: { game: Game }) {
                     `games/${game.id}/next_tile_plays.json`,
                     {
                         nextTilePlay: {
-                            ...selectedNextTilePosition,
-                            orientation_id: 'north'
+                            ...nextTilePosition,
+                            orientationId: nextTileOrientationId
                         }
                     }
                 )
@@ -33,11 +37,23 @@ export default function NextTileSvg({ game }: { game: Game }) {
         asyncOnClick()
     }
 
-    if (selectedNextTilePosition) {
-        return <g className="next-tile-container" transform={`translate(${selectedNextTilePosition.x * TILE_SIZE} ${selectedNextTilePosition.y * TILE_SIZE})`}>
-            <g className="next-tile-contents" onClick={onClick}>
-                <TileSvg tile={game.nextTile} />
+    const rotateLeft = () => {
+        setNextTileOrientationId(orientationPreviousOrientation({ id: nextTileOrientationId}).id)
+    }
+
+    const rotateRight = () => {
+        setNextTileOrientationId(orientationNextOrientation({ id: nextTileOrientationId}).id)
+    }
+
+    if (nextTilePosition) {
+        return <g className="next-tile-container" transform={`translate(${nextTilePosition.x * TILE_SIZE} ${nextTilePosition.y * TILE_SIZE})`}>
+            <g className="next-tile-container" transform={`${transformForOrientation({ id: nextTileOrientationId })}`}>
+                <g className="next-tile-contents" onClick={onClick}>
+                    <TileSvg tile={game.nextTile} />
+                </g>
             </g>
+            <text onClick={rotateLeft} className="next-tile-rotate-button" x={-TILE_RADIUS - 10} y={0} textAnchor="middle">⬅️</text>
+            <text onClick={rotateRight} className="next-tile-rotate-button" x={TILE_RADIUS + 10} y={0} textAnchor="middle">➡️</text>
         </g>
     } else {
         return null;

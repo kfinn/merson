@@ -41,3 +41,7 @@
      animation: tile-pending-play 1s infinite ease-in-out alternate;
      cursor: pointer;
  }
+
+ .next-tile-rotate-button {
+     cursor: pointer;
+ }
