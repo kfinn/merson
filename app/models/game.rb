@@ -34,6 +34,10 @@ class Game < ApplicationRecord
         @available_next_tile_positions
     end
 
+    def changed!
+        GamesChannel.broadcast_to(self, {})
+    end
+
     private
 
     def generate!

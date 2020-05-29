@@ -1,5 +1,5 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import selectedAvailableNextTilePosition from '../models/selectedAvailableNextTilePosition';
 import TileSvg from "./TileSvg";
 import { TILE_SIZE } from './PlayedTileSvg';
@@ -7,7 +7,11 @@ import Api from '../models/Api';
 import { Game } from './Game';
 
 export default function NextTileSvg({ game }: { game: Game }) {
-    const selectedNextTilePosition = useRecoilValue(selectedAvailableNextTilePosition)
+    const [selectedNextTilePosition, setSelectedNextTilePosition] = useRecoilState(selectedAvailableNextTilePosition)
+
+    useEffect(() => {
+        setSelectedNextTilePosition(null)
+    }, [game.nextTile.id])
 
     const onClick = () => {
         const asyncOnClick = async () => {

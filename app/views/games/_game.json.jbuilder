@@ -7,11 +7,11 @@ json.played_tiles(
         road_segments: :edges
     )
 ) do |played_tile|
-    json.partial! played_tile
+    json.partial! 'tiles/tile', tile: played_tile
 end
 
 json.next_tile do
-    json.partial! game.next_tile
+    json.partial! 'tiles/tile', tile: game.next_tile
 end
 
 json.available_next_tile_positions game.available_next_tile_positions do |position|

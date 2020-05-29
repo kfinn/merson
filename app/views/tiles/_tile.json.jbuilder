@@ -9,7 +9,7 @@ if tile.y.present?
 end
 
 json.orientation do
-    json.partial! tile.orientation
+    json.partial! 'orientations/orientation', orientation: tile.orientation
 end
 
 json.field_regions tile.field_regions.includes(:edges) do |field_region|
@@ -17,7 +17,7 @@ json.field_regions tile.field_regions.includes(:edges) do |field_region|
     json.edges field_region.edges do |edge|
         json.(edge, :id, :type)
         json.orientation do
-            json.partial! edge.orientation
+            json.partial! 'orientations/orientation', orientation: edge.orientation
         end
     end
 end
@@ -27,7 +27,7 @@ json.city_regions tile.city_regions.includes(:edges) do |city_region|
     json.edges city_region.edges do |edge|
         json.(edge, :id, :type)
         json.orientation do
-            json.partial! edge.orientation
+            json.partial! 'orientations/orientation', orientation: edge.orientation
         end
     end
 end
@@ -37,7 +37,7 @@ json.road_segments tile.road_segments.includes(:edges) do |road_segment|
     json.edges road_segment.edges do |edge|
         json.(edge, :id, :type)
         json.orientation do
-            json.partial! edge.orientation
+            json.partial! 'orientations/orientation', orientation: edge.orientation
         end
     end
 end

@@ -1,4 +1,6 @@
 class Tile < ApplicationRecord
+    include GameChanging
+
     belongs_to :game
 
     has_many :edges

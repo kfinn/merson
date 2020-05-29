@@ -1,9 +1,12 @@
-import React from 'react';
+import { createConsumer } from '@rails/actioncable';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { RecoilRoot } from 'recoil';
+import Api from '../models/Api';
+import { Point } from '../models/Point';
 import BoardSvg from './BoardSvg';
 import { PlayedTile } from './PlayedTileSvg';
 import { Tile } from './TileSvg';
-import { Point } from '../models/Point';
-import { RecoilRoot } from 'recoil';
 
 export interface Game {
     id: number
@@ -12,7 +15,34 @@ export interface Game {
     availableNextTilePositions: Point[]
 }
 
-export default function Game({ game }: { game: Game }) {
+const consumer = createConsumer()
+
+export default function Game(props: { game: Game }) {
+    const [game, setGame] = useState(props.game)
+
+    const refresh = async () => {
+        const response = await Api.get(`/games/${game.id}.json`)
+        setGame(response.data as Game)
+    }
+
+    const debouncedRefresh = _.debounce(refresh)
+
+    useEffect(() => {
+        const subscription = consumer.subscriptions.create(
+            { channel: 'GamesChannel', id: game.id },
+            {
+                connected() {
+                    debouncedRefresh()
+                },
+                received() {
+                    debouncedRefresh()
+                }
+            }
+        )
+
+        return () => { console.log(subscription); subscription.disconnect() }
+    }, [game.id])
+
     return <RecoilRoot>
         <BoardSvg game={game} />
     </RecoilRoot>
