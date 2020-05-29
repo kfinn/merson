@@ -14,4 +14,17 @@ class Edge < ApplicationRecord
 
     has_one :right_edge_field_region, -> { right_of_road }, class_name: 'EdgeFieldRegion', foreign_key: :edge_id
     has_one :right_field_region, through: :right_edge_field_region, source: :field_region
+
+    def self.unoccupied
+        where.not(id: EdgePairMember.all.select(:edge_id))
+    end
+
+    Position = Struct.new(:x, :y)
+    def facing_position
+        Position.new(tile.x + absolute_orientation.dx, tile.y + absolute_orientation.dy)
+    end
+
+    def absolute_orientation
+        @absolute_orientation ||= orientation + tile.orientation
+    end
 end

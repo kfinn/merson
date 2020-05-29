@@ -32,8 +32,12 @@ class Orientation < ActiveHash::Base
         find_by! rotation: (rotation % 360)
     end
 
+    def +(other)
+        self.class.from_rotation(rotation + other.rotation)
+    end
+
     def -(other)
-        self.class.from_rotation(rotation - other.rotation)
+        self.class.from_rotation(rotation + (-other.rotation))
     end
 
     def -@

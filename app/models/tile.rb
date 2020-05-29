@@ -15,7 +15,7 @@ class Tile < ApplicationRecord
     validate :x_and_y_must_be_mutually_present
     validates :orientation, inclusion: { in: Orientation.all }
 
-    scope :played, -> { where.not(x: nil, y: nil) }
+    scope :played, -> { where.not(x: nil).where.not(y: nil) }
     scope :unplayed, -> { where(x: nil, y: nil) }
     scope :upcoming, -> { unplayed.order(:ordering) }
 

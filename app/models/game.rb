@@ -5,6 +5,8 @@ class Game < ApplicationRecord
     has_many :played_tiles, -> { played }, class_name: 'Tile'
     has_one :next_tile, -> { upcoming }, class_name: 'Tile'
 
+    has_many :unoccupied_played_tile_edges, -> { unoccupied }, through: :played_tiles, source: :edges
+
     before_validation :generate!, on: :create
 
     def started?
@@ -15,23 +17,8 @@ class Game < ApplicationRecord
         !started?
     end
 
-    Position = Struct.new(:x, :y)
     def available_next_tile_positions
-        unless instance_variable_defined?(:@available_next_tile_positions)
-            occupied_positions = Set.new
-            positions_neighboring_occupied_positions = Set.new
-            played_tiles.each do |tile|
-                occupied_positions << Position.new(tile.x, tile.y)
-
-                positions_neighboring_occupied_positions << Position.new(tile.x, tile.y - 1)
-                positions_neighboring_occupied_positions << Position.new(tile.x + 1, tile.y)
-                positions_neighboring_occupied_positions << Position.new(tile.x, tile.y + 1)
-                positions_neighboring_occupied_positions << Position.new(tile.x - 1, tile.y)
-            end
-
-            @available_next_tile_positions = positions_neighboring_occupied_positions - occupied_positions
-        end
-        @available_next_tile_positions
+        @available_next_tile_positions ||= unoccupied_played_tile_edges.includes(:tile).map(&:facing_position).uniq
     end
 
     def changed!

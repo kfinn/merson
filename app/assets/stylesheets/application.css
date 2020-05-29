@@ -15,10 +15,6 @@
  */
 
 
- .board {
-     max-height: 600px;
- }
-
  .available-next-tile-position {
      cursor: pointer;
  }
