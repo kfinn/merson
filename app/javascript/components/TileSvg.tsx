@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edge } from '../models/Edge';
+import { Edge, RoadEdge } from '../models/Edge';
 import { Orientation } from '../models/Orientation';
 import TileCityRegionsSvg from './TileCityRegionsSvg';
 import { CityRegion } from './TileCityRegionSvg';
@@ -21,10 +21,12 @@ export interface FieldRegion {
 
 export interface RoadSegment {
     id: number
-    edges: Edge[]
+    edges: RoadEdge[]
 }
 
 export default function TileSvg({ tile }: { tile: Tile }) {
+
+
     return (
         <React.Fragment>
             <TileCityRegionsSvg cityRegions={tile.cityRegions}>

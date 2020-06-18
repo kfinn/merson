@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
-import { Edge, edgeCorners, EdgeCorners, edgeOrdering } from '../models/Edge';
-import { Point } from '../models/Point';
+import { Edge, edgeCornerPair, CornerPair, edgeOrdering, cornerPairToString } from '../models/Edge';
+import { Point, pointEquals } from '../models/Point';
 import { TILE_SIZE } from './PlayedTileSvg';
 
 export interface CityRegion {
@@ -11,39 +11,66 @@ export interface CityRegion {
 
 const CURVE_DEPTH = 0.25
 
-function edgeCornersConnectionPathStep(lastEdgeCorners: EdgeCorners, nextEdgeCornersStart: Point) {
-    if (lastEdgeCorners.end.x != nextEdgeCornersStart.x || lastEdgeCorners.end.y != nextEdgeCornersStart.y) {
-        if (lastEdgeCorners.end.x == nextEdgeCornersStart.x) {
-            return `C ` +
-                `${lastEdgeCorners.end.x * TILE_SIZE * CURVE_DEPTH} ${lastEdgeCorners.end.y * TILE_SIZE * CURVE_DEPTH}, ` +
-                `${nextEdgeCornersStart.x * TILE_SIZE * CURVE_DEPTH} ${nextEdgeCornersStart.y * TILE_SIZE * CURVE_DEPTH}, ` +
-                `${nextEdgeCornersStart.x * TILE_SIZE} ${nextEdgeCornersStart.y * TILE_SIZE}`
-        } else if (lastEdgeCorners.end.y == nextEdgeCornersStart.y) {
-            return `C ` +
-                `${lastEdgeCorners.end.x * TILE_SIZE * CURVE_DEPTH} ${lastEdgeCorners.end.y * TILE_SIZE * CURVE_DEPTH}, ` +
-                `${nextEdgeCornersStart.x * TILE_SIZE * CURVE_DEPTH} ${nextEdgeCornersStart.y * TILE_SIZE * CURVE_DEPTH}, ` +
-                `${nextEdgeCornersStart.x * TILE_SIZE} ${nextEdgeCornersStart.y * TILE_SIZE}`
-        } else {
-            const sharedCorner = lastEdgeCorners.start
-            return `C ` +
-                `${sharedCorner.x * TILE_SIZE * (CURVE_DEPTH * 2)} ${sharedCorner.y * TILE_SIZE * (CURVE_DEPTH * 2)}, ` +
-                `${sharedCorner.x * TILE_SIZE * (CURVE_DEPTH * 2)} ${sharedCorner.y * TILE_SIZE * (CURVE_DEPTH * 2)}, ` +
-                `${nextEdgeCornersStart.x * TILE_SIZE} ${nextEdgeCornersStart.y * TILE_SIZE}`
-        }
+function cornerPairConnectionPathStep(lastEdgeCornerPair: CornerPair, nextEdgeCornerPairStart: Point) {
+    if (pointEquals(lastEdgeCornerPair.end, nextEdgeCornerPairStart)) {
+        return;
+    }
+
+    if (lastEdgeCornerPair.end.x == nextEdgeCornerPairStart.x) {
+        return `C ` +
+            `${lastEdgeCornerPair.end.x * TILE_SIZE * CURVE_DEPTH} ${lastEdgeCornerPair.end.y * TILE_SIZE * CURVE_DEPTH}, ` +
+            `${nextEdgeCornerPairStart.x * TILE_SIZE * CURVE_DEPTH} ${nextEdgeCornerPairStart.y * TILE_SIZE * CURVE_DEPTH}, ` +
+            `${nextEdgeCornerPairStart.x * TILE_SIZE} ${nextEdgeCornerPairStart.y * TILE_SIZE}`
+    } else if (lastEdgeCornerPair.end.y == nextEdgeCornerPairStart.y) {
+        return `C ` +
+            `${lastEdgeCornerPair.end.x * TILE_SIZE * CURVE_DEPTH} ${lastEdgeCornerPair.end.y * TILE_SIZE * CURVE_DEPTH}, ` +
+            `${nextEdgeCornerPairStart.x * TILE_SIZE * CURVE_DEPTH} ${nextEdgeCornerPairStart.y * TILE_SIZE * CURVE_DEPTH}, ` +
+            `${nextEdgeCornerPairStart.x * TILE_SIZE} ${nextEdgeCornerPairStart.y * TILE_SIZE}`
+    } else {
+        const interiorCorner = lastEdgeCornerPair.start
+        return `C ` +
+            `${interiorCorner.x * TILE_SIZE * (CURVE_DEPTH * 2)} ${interiorCorner.y * TILE_SIZE * (CURVE_DEPTH * 2)}, ` +
+            `${interiorCorner.x * TILE_SIZE * (CURVE_DEPTH * 2)} ${interiorCorner.y * TILE_SIZE * (CURVE_DEPTH * 2)}, ` +
+            `${nextEdgeCornerPairStart.x * TILE_SIZE} ${nextEdgeCornerPairStart.y * TILE_SIZE}`
     }
 }
 
 export default function TileCityRegionSvg({ cityRegion }: { cityRegion: CityRegion }) {
     const sortedEdges = _.sortBy(cityRegion.edges, edgeOrdering)
-    const sortedEdgesCorners = _.map(sortedEdges, edgeCorners)
+    const sortedCornerPairs = _.map(sortedEdges, edgeCornerPair)
 
-    let lastEdgeCorners = _.last(sortedEdgesCorners)
-    const svgMoves = [`M ${lastEdgeCorners.end.x * TILE_SIZE} ${lastEdgeCorners.end.y * TILE_SIZE}`]
-    _.each(sortedEdgesCorners, (edgeCorners, index) => {
-        const { start, end } = edgeCorners
-        svgMoves.push(edgeCornersConnectionPathStep(lastEdgeCorners, start))
-        svgMoves.push(`L ${end.x * TILE_SIZE} ${end.y * TILE_SIZE}`)
-        lastEdgeCorners = edgeCorners
+    let lastCornerPair = _.last(sortedCornerPairs)
+    const interestingPathSteps = {}
+    _.each(sortedCornerPairs, (cornerPair) => {
+        const pathStep = cornerPairConnectionPathStep(lastCornerPair, cornerPair.start)
+        if (pathStep) {
+            const pathCornerPair = {
+                start: lastCornerPair.end,
+                end: cornerPair.start
+            }
+            interestingPathSteps[cornerPairToString(pathCornerPair)] = pathStep
+            lastCornerPair = cornerPair
+        }
+    })
+
+    const corners = [_.first(sortedCornerPairs).start]
+    _.each(sortedCornerPairs, ({ start, end }) => {
+        if (!pointEquals(_.last(corners), start)) {
+            corners.push(start)
+        }
+        corners.push(end)
+    })
+
+    let lastCorner = _.last(corners)
+    const svgMoves = [`M ${lastCorner.x * TILE_SIZE} ${lastCorner.y * TILE_SIZE}`]
+    _.each(corners, (corner) => {
+        const interestingPath = interestingPathSteps[cornerPairToString({ start: lastCorner, end: corner })]
+        if (interestingPath) {
+            svgMoves.push(interestingPath)
+        } else {
+            svgMoves.push(`L ${corner.x * TILE_SIZE} ${corner.y * TILE_SIZE}`)
+        }
+        lastCorner = corner
     })
 
     return <path d={_.join(svgMoves, ' ')} fill="brown" />

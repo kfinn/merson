@@ -6,8 +6,8 @@ import _ from 'lodash';
 export default function({ fieldRegions }: { fieldRegions: FieldRegion[] }) {
     return <React.Fragment>
         {
-            _.map(fieldRegions, (fieldRegion) => (
-                <TileFieldRegionSvg fieldRegion={fieldRegion} key={fieldRegion.id} />
+            _.map(fieldRegions, (fieldRegion, index) => (
+                <TileFieldRegionSvg fieldRegion={fieldRegion} index={index} key={fieldRegion.id} />
             ))
         }
     </React.Fragment>

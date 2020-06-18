@@ -19,7 +19,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react_ujs": "^2.6.1",
-    "recoil": "^0.0.7",
     "snakeize": "^0.1.0",
     "ts-loader": "^7.0.5",
     "turbolinks": "^5.2.0",

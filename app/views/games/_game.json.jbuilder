@@ -2,9 +2,9 @@ json.(game, :id, :started_at)
 
 json.played_tiles(
     game.played_tiles.includes(
-        city_regions: :edges,
+        city_regions: { edges: :field_regions },
         field_regions: :edges,
-        road_segments: :edges
+        road_segments: { edges: :field_regions }
     )
 ) do |tile|
     json.(tile, :id)
@@ -47,6 +47,12 @@ json.played_tiles(
             json.(edge, :id, :type)
             json.orientation do
                 json.(edge.orientation, :id)
+            end
+            json.left_field_region do
+                json.(edge.left_field_region, :id)
+            end
+            json.right_field_region do
+                json.(edge.right_field_region, :id)
             end
         end
     end

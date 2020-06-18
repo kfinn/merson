@@ -1,10 +1,8 @@
-
 import _ from 'lodash';
 import React from 'react';
-import AvailableNextTilePositionSvg from './AvailableNextTilePositionSvg';
 import { Game } from './Game';
+import NextTileFormSvg from './NextTileFormSvg';
 import PlayedTileSvg, { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
-import NextTileSvg from './NextTileSvg';
 
 const BORDER_RADIUS = 100
 
@@ -33,12 +31,7 @@ export default function BoardSvg({ game }: { game: Game }) {
                     <PlayedTileSvg key={playedTile.id} playedTile={playedTile} />
                 ))
             }
-            {
-                _.map(availableNextTilePositions, (position) => (
-                    <AvailableNextTilePositionSvg position={position} key={`${position.x} ${position.y}`} />
-                ))
-            }
-            <NextTileSvg game={game} />
+            <NextTileFormSvg game={game} />
         </svg>
     </React.Fragment>
 }

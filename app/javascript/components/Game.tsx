@@ -1,7 +1,6 @@
 import { createConsumer } from '@rails/actioncable';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { RecoilRoot } from 'recoil';
 import Api from '../models/Api';
 import { Point } from '../models/Point';
 import BoardSvg from './BoardSvg';
@@ -43,7 +42,5 @@ export default function Game(props: { game: Game }) {
         return () => { console.log(subscription); subscription.disconnect() }
     }, [game.id])
 
-    return <RecoilRoot>
-        <BoardSvg game={game} />
-    </RecoilRoot>
+    return <BoardSvg game={game} />
 }
