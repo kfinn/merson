@@ -29,11 +29,10 @@ export default function TileSvg({ tile }: { tile: Tile }) {
 
     return (
         <React.Fragment>
-            <TileCityRegionsSvg cityRegions={tile.cityRegions}>
-                <TileRoadSegmentsSvg roadSegments={tile.roadSegments}>
-                    <TileFieldRegionsSvg fieldRegions={tile.fieldRegions} />
-                </TileRoadSegmentsSvg>
-            </TileCityRegionsSvg>
+            <TileCityRegionsSvg cityRegions={tile.cityRegions} />
+            <TileRoadSegmentsSvg roadSegments={tile.roadSegments}>
+                <TileFieldRegionsSvg tile={tile} />
+            </TileRoadSegmentsSvg>
         </React.Fragment>
     )
 }

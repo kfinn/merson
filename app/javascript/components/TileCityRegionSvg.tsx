@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { Edge, edgeCornerPair, CornerPair, edgeOrdering, cornerPairToString } from '../models/Edge';
+import { Edge, edgeCornerPair, CornerPair, edgeOrdering, cornerPairToString, cornerPairsToCorners } from '../models/Edge';
 import { Point, pointEquals } from '../models/Point';
 import { TILE_SIZE } from './PlayedTileSvg';
 
@@ -9,9 +9,9 @@ export interface CityRegion {
     edges: Edge[]
 }
 
-const CURVE_DEPTH = 0.25
+export const CURVE_DEPTH = 0.25
 
-function cornerPairConnectionPathStep(lastEdgeCornerPair: CornerPair, nextEdgeCornerPairStart: Point) {
+function cityCornerPairConnectionPathStep(lastEdgeCornerPair: CornerPair, nextEdgeCornerPairStart: Point) {
     if (pointEquals(lastEdgeCornerPair.end, nextEdgeCornerPairStart)) {
         return;
     }
@@ -42,7 +42,7 @@ export default function TileCityRegionSvg({ cityRegion }: { cityRegion: CityRegi
     let lastCornerPair = _.last(sortedCornerPairs)
     const interestingPathSteps = {}
     _.each(sortedCornerPairs, (cornerPair) => {
-        const pathStep = cornerPairConnectionPathStep(lastCornerPair, cornerPair.start)
+        const pathStep = cityCornerPairConnectionPathStep(lastCornerPair, cornerPair.start)
         if (pathStep) {
             const pathCornerPair = {
                 start: lastCornerPair.end,
@@ -53,13 +53,7 @@ export default function TileCityRegionSvg({ cityRegion }: { cityRegion: CityRegi
         }
     })
 
-    const corners = [_.first(sortedCornerPairs).start]
-    _.each(sortedCornerPairs, ({ start, end }) => {
-        if (!pointEquals(_.last(corners), start)) {
-            corners.push(start)
-        }
-        corners.push(end)
-    })
+    const corners = cornerPairsToCorners(sortedCornerPairs)
 
     let lastCorner = _.last(corners)
     const svgMoves = [`M ${lastCorner.x * TILE_SIZE} ${lastCorner.y * TILE_SIZE}`]

@@ -1,11 +1,17 @@
+import _ from 'lodash';
 import React from 'react';
-import { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
+import { cornerPairToString, edgesToSortedCorners, edgesToPathD } from '../models/Edge';
+import { TILE_SIZE } from './PlayedTileSvg';
 import { FieldRegion } from "./TileSvg";
 
-export default function TileFieldRegionSvg({ fieldRegion, index }: { fieldRegion: FieldRegion, index: number }) {
-    const COLOR_VARIANTS = ['#00FF00', '#008800', '#004400']
+interface Props {
+    fieldRegion: FieldRegion
+    interestingPathSteps: { [index: string]: string }
+    index: number
+}
 
-    return <React.Fragment>
-        <rect x={-TILE_RADIUS} y={-TILE_RADIUS} width={TILE_SIZE} height={TILE_SIZE} fill={COLOR_VARIANTS[index]} />
-    </React.Fragment>
+export default function TileFieldRegionSvg({ fieldRegion, interestingPathSteps, index }: Props) {
+    const COLOR_VARIANTS = ['#00FF00', '#008800', '#004400']
+    const pathD = edgesToPathD(fieldRegion.edges, interestingPathSteps)
+    return <path d={pathD} fill={COLOR_VARIANTS[index]} />
 }
