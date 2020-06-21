@@ -41,3 +41,9 @@
  .next-tile-rotate-button {
      cursor: pointer;
  }
+
+ .road-segment {
+     stroke: gray;
+     stroke-width: 15px;
+     fill: none;
+ }
