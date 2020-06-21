@@ -2,6 +2,8 @@ import { Orientation, OrientationId, orientationOrdering } from "./Orientation";
 import { Point, pointToString, pointEquals } from "./Point";
 import _ from "lodash";
 import { TILE_SIZE } from "../components/PlayedTileSvg";
+import { CityRegionPathStepCollection, linearCityRegionPathStep, cityRegionPathStepCollectionFindPath } from "./CityRegionPathStep";
+import { Corner, cornerToPoint } from "./Corner";
 
 export interface Edge {
     id: number
@@ -21,20 +23,20 @@ enum EdgeType {
     ROAD_EDGE = 'RoadEdge'
 }
 
-const EDGE_CORNERS_BY_ORIENTATION_ID = {
-    [OrientationId.NORTH]: { start: { x: -0.5, y: -0.5 }, end: { x: 0.5, y: -0.5 } },
-    [OrientationId.EAST]: { start: { x: 0.5, y: -0.5 }, end: { x: 0.5, y: 0.5 } },
-    [OrientationId.SOUTH]: { start: { x: 0.5, y: 0.5 }, end: { x: -0.5, y: 0.5 } },
-    [OrientationId.WEST]: { start: { x: -0.5, y: 0.5 }, end: { x: -0.5, y: -0.5 } },
+const EDGE_CORNER_PAIRS_BY_ORIENTATION_ID = {
+    [OrientationId.NORTH]: { start: Corner.NORTH_WEST, end: Corner.NORTH_EAST },
+    [OrientationId.EAST]: { start: Corner.NORTH_EAST, end: Corner.SOUTH_EAST },
+    [OrientationId.SOUTH]: { start: Corner.SOUTH_EAST, end: Corner.SOUTH_WEST },
+    [OrientationId.WEST]: { start: Corner.SOUTH_WEST, end: Corner.NORTH_WEST },
 }
 
 export interface CornerPair {
-    start: Point,
-    end: Point,
+    start: Corner,
+    end: Corner,
 }
 
 export function edgeCornerPair({ orientation }: Edge): CornerPair {
-    return EDGE_CORNERS_BY_ORIENTATION_ID[orientation.id]
+    return EDGE_CORNER_PAIRS_BY_ORIENTATION_ID[orientation.id]
 }
 
 export function edgeOrdering({ orientation }: Edge) {
@@ -47,18 +49,15 @@ export function edgesToSortedCorners(edges: Edge[]) {
     return cornerPairsToCorners(sortedCornerPairs)
 }
 
-export function edgesToPathD(edges: Edge[], interestingPathSteps?: { [index: string]: string }) {
+export function edgesToPathD(edges: Edge[], pathSteps: CityRegionPathStepCollection) {
     const corners = edgesToSortedCorners(edges)
 
     let lastCorner = _.last(corners)
-    const svgMoves = [`M ${lastCorner.x * TILE_SIZE} ${lastCorner.y * TILE_SIZE}`]
+    const cornerPoint = cornerToPoint(lastCorner)
+    const svgMoves = [`M ${cornerPoint.x * TILE_SIZE} ${cornerPoint.y * TILE_SIZE}`]
     _.each(corners, (corner) => {
-        const interestingPath = interestingPathSteps[cornerPairToString({ start: lastCorner, end: corner })]
-        if (interestingPath) {
-            svgMoves.push(interestingPath)
-        } else {
-            svgMoves.push(`L ${corner.x * TILE_SIZE} ${corner.y * TILE_SIZE}`)
-        }
+        const pathStep = cityRegionPathStepCollectionFindPath(pathSteps, lastCorner, corner)
+        svgMoves.push(pathStep)
         lastCorner = corner
     })
     return _.join(svgMoves, ' ')
@@ -75,14 +74,23 @@ export function edgeCenter({ orientation }: Edge): Point {
     return EDGE_CENTERS_BY_ORIENTATION_ID[orientation.id]
 }
 
-export function cornerPairToString({ start, end }: CornerPair) {
-    return `{ start: ${pointToString(start)}, end: ${pointToString(end)} }`
+export function cornerPairReverse({ start, end }: CornerPair): CornerPair {
+    return { start: end, end: start }
+}
+
+export function cornerPairToString({ start, end }: CornerPair): string {
+    return JSON.stringify({ start, end })
+}
+
+export function cornerPairFromString(s: string): CornerPair {
+    const { start, end } = JSON.parse(s)
+    return { start, end }
 }
 
 export function cornerPairsToCorners(cornerPairs: CornerPair[]) {
     const corners = [_.first(cornerPairs).start]
     _.each(cornerPairs, ({ start, end }) => {
-        if (!pointEquals(_.last(corners), start)) {
+        if (_.last(corners) != start) {
             corners.push(start)
         }
         corners.push(end)

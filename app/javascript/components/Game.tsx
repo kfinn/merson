@@ -39,7 +39,7 @@ export default function Game(props: { game: Game }) {
             }
         )
 
-        return () => { console.log(subscription); subscription.disconnect() }
+        return () => { subscription.disconnect() }
     }, [game.id])
 
     return <BoardSvg game={game} />
