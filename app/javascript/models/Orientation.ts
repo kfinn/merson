@@ -11,6 +11,11 @@ export interface Orientation {
     id: OrientationId
 }
 
+export const ORIENTATION_NORTH: Orientation = { id: OrientationId.NORTH }
+export const ORIENTATION_EAST: Orientation = { id: OrientationId.EAST }
+export const ORIENTATION_SOUTH: Orientation = { id: OrientationId.SOUTH }
+export const ORIENTATION_WEST: Orientation = { id: OrientationId.WEST }
+
 const NEXT_ORIENTATION_ID_BY_ORIENTATION_ID = {
     [OrientationId.NORTH]: OrientationId.EAST,
     [OrientationId.EAST]: OrientationId.SOUTH,
@@ -33,24 +38,15 @@ export function orientationPreviousOrientation({ id }: Orientation) {
     return { id: PREVIOUS_ORIENTATION_ID_BY_ORIENTATION_ID[id]}
 }
 
-const ADJACENT_ORIENTATION_IDS_BY_ORIENTATION_ID = {
-    [OrientationId.NORTH]: [orientationPreviousOrientation({ id: OrientationId.NORTH }).id, orientationNextOrientation({ id: OrientationId.NORTH}).id],
-    [OrientationId.EAST]: [orientationPreviousOrientation({ id: OrientationId.EAST }).id, orientationNextOrientation({ id: OrientationId.EAST}).id],
-    [OrientationId.SOUTH]: [orientationPreviousOrientation({ id: OrientationId.SOUTH }).id, orientationNextOrientation({ id: OrientationId.SOUTH}).id],
-    [OrientationId.WEST]: [orientationPreviousOrientation({ id: OrientationId.WEST }).id, orientationNextOrientation({ id: OrientationId.WEST}).id],
-}
-
-export function orientationsAreAdjacent(orientation1: Orientation, orientation2: Orientation) {
-    return _.includes(ADJACENT_ORIENTATION_IDS_BY_ORIENTATION_ID[orientation1.id], orientation2.id)
-}
-
-const ORIENTATION_ORDERING_BY_ORIENTATION_ID = {
-    [OrientationId.NORTH]: 0,
-    [OrientationId.EAST]: 1,
-    [OrientationId.SOUTH]: 2,
-    [OrientationId.WEST]: 3,
-}
-
-export function orientationOrdering({ id }: Orientation) {
-    return ORIENTATION_ORDERING_BY_ORIENTATION_ID[id]
+export function orientationTransform({ id }: Orientation) {
+    switch (id) {
+        case OrientationId.NORTH:
+            return '';
+        case OrientationId.EAST:
+            return 'rotate(90)';
+        case OrientationId.SOUTH:
+            return 'rotate(180)';
+        case OrientationId.WEST:
+            return 'rotate(270)';
+    }
 }

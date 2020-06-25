@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Api from '../models/Api';
-import { OrientationId, orientationNextOrientation, orientationPreviousOrientation } from '../models/Orientation';
+import { OrientationId, orientationNextOrientation, orientationPreviousOrientation, orientationTransform } from '../models/Orientation';
 import { Point } from '../models/Point';
 import { Game } from './Game';
-import { TILE_RADIUS, TILE_SIZE, transformForOrientation } from './PlayedTileSvg';
+import { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
 import TileSvg from "./TileSvg";
 
 interface Props {
@@ -48,7 +48,7 @@ export default function NextTileSvg({ game, position }: Props) {
 
     if (position) {
         return <g className="next-tile-container" transform={`translate(${position.x * TILE_SIZE} ${position.y * TILE_SIZE})`}>
-            <g className="next-tile-container" transform={`${transformForOrientation({ id: orientationId })}`}>
+            <g className="next-tile-container" transform={`${orientationTransform({ id: orientationId })}`}>
                 <g className="next-tile-contents" onClick={onClick}>
                     <TileSvg tile={game.nextTile} />
                 </g>

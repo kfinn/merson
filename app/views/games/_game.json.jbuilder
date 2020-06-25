@@ -9,6 +9,10 @@ json.played_tiles(
 ) do |tile|
     json.(tile, :id)
 
+    json.tile_variant do
+        json.(tile.tile_variant, :id)
+    end
+
     if tile.x.present?
         json.(tile, :x)
     end
@@ -60,6 +64,10 @@ end
 
 json.next_tile do
     json.(game.next_tile, :id)
+
+    json.tile_variant do
+        json.(game.next_tile.tile_variant, :id)
+    end
 
     json.orientation do
         json.(game.next_tile.orientation, :id)

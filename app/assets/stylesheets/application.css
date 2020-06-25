@@ -47,3 +47,15 @@
      stroke-width: 15px;
      fill: none;
  }
+
+ .city {
+     fill: chocolate;
+ }
+
+ .field {
+     fill: green;
+ }
+
+ .road {
+     fill: gray;
+ }
