@@ -1,22 +1,38 @@
-import _ from 'lodash';
+import _, { initial } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import AvailableNextTilePositionSvg from './AvailableNextTilePositionSvg';
 import { Game } from './Game';
 import NextTileSvg from './NextTileSvg';
+import { Point } from '../models/Point';
 
-export default function NextTileFormSvg({ game }: { game: Game }) {
-    const [position, setPosition] = useState(_.first(game.availableNextTilePositions))
+export default function NextTileFormSvg({ game, availableNextTilePositions }: { game: Game, availableNextTilePositions: Point[] }) {
+    const getInitialNextTilePosition = () => {
+        if (_.some(availableNextTilePositions)) {
+            const xPositions = _.uniq(_.map(availableNextTilePositions, 'x'))
+            const columnsCount = _.max(xPositions) - _.min(xPositions)
+            return _.minBy(availableNextTilePositions, ({ x, y }) => (x + y * columnsCount))
+        } else if (game.turn && game.turn.tile.x && game.turn.tile.y) {
+            return { x: game.turn.tile.x, y: game.turn.tile.y }
+        } else {
+            const minPlayedTileXPosition = _.min(_.map(game.playedTiles, 'x'))
+            const minPlayedTileYPosition = _.min(_.map(game.playedTiles, 'y'))
+            return { x: minPlayedTileXPosition - 1, y: minPlayedTileYPosition - 1 }
+        }
+    }
+
+    const [position, setPosition] = useState(getInitialNextTilePosition())
 
     useEffect(() => {
-        const xPositions = _.uniq(_.map(game.availableNextTilePositions, 'x'))
-        const columnsCount = _.max(xPositions) - _.min(xPositions)
-        const topLeftPosition = _.minBy(game.availableNextTilePositions, ({ x, y }) =>(x + y * columnsCount))
-        setPosition(topLeftPosition)
-    }, [game.availableNextTilePositions])
+        setPosition(getInitialNextTilePosition())
+    }, [game.turn?.tile?.id])
+
+    if (!game.turn) {
+        return null;
+    }
 
     return <React.Fragment>
         {
-            _.map(game.availableNextTilePositions, (position) => (
+            _.map(availableNextTilePositions, (position) => (
                 <AvailableNextTilePositionSvg
                     position={position}
                     key={`${position.x} ${position.y}`}
@@ -24,6 +40,6 @@ export default function NextTileFormSvg({ game }: { game: Game }) {
                 />
             ))
         }
-        <NextTileSvg game={game} position={position} />
+        <NextTileSvg game={game} tile={game.turn.tile} position={position} />
     </React.Fragment>
 }

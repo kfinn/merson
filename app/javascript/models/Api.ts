@@ -15,7 +15,17 @@ Api.interceptors.request.use((config) => {
     const data = config.data || {}
     const authenticityToken = $('meta[name=csrf-token]').attr('content')
     const dataWithAuthToken = { authenticityToken, ...data }
-    return { data: snakeize(dataWithAuthToken), ..._.omit(config, 'data') }
+    return {
+        ...config,
+        data: snakeize(dataWithAuthToken)
+    }
+})
+
+Api.interceptors.request.use((config) => {
+    return {
+        ...config,
+        url: `${config.url}.json`
+    }
 })
 
 Api.interceptors.response.use((response) => {

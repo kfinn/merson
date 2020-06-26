@@ -26,6 +26,8 @@ import TwoNorthSouthCitiesSvg from './tile_variants/TwoNorthSouthCitiesSvg';
 
 export interface Tile {
     id: number
+    x?: number
+    y?: number
     tileVariant: TileVariant
     orientation: Orientation
     fieldRegions: FieldRegion[]

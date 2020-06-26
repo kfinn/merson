@@ -4,27 +4,28 @@ import { OrientationId, orientationNextOrientation, orientationPreviousOrientati
 import { Point } from '../models/Point';
 import { Game } from './Game';
 import { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
-import TileSvg from "./TileSvg";
+import TileSvg, { Tile } from "./TileSvg";
 
 interface Props {
     game: Game
+    tile: Tile
     position: Point
 }
 
-export default function NextTileSvg({ game, position }: Props) {
+export default function NextTileSvg({ game, tile, position }: Props) {
     const [orientationId, setOrientationId] = useState(OrientationId.NORTH)
 
     useEffect(() => {
         setOrientationId(OrientationId.NORTH)
-    }, [game.nextTile.id])
+    }, [tile.id])
 
     const onClick = () => {
         const asyncOnClick = async () => {
             try {
                 await Api.post(
-                    `games/${game.id}/next_tile_plays.json`,
+                    `games/${game.id}/tile_plays`,
                     {
-                        nextTilePlay: {
+                        tilePlay: {
                             ...position,
                             orientationId
                         }
@@ -50,7 +51,7 @@ export default function NextTileSvg({ game, position }: Props) {
         return <g className="next-tile-container" transform={`translate(${position.x * TILE_SIZE} ${position.y * TILE_SIZE})`}>
             <g className="next-tile-container" transform={`${orientationTransform({ id: orientationId })}`}>
                 <g className="next-tile-contents" onClick={onClick}>
-                    <TileSvg tile={game.nextTile} />
+                    <TileSvg tile={tile} />
                 </g>
             </g>
             <text onClick={rotateLeft} className="next-tile-rotate-button" x={-TILE_RADIUS - 10} y={0} textAnchor="middle">⬅️</text>

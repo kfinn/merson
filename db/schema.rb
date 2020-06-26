@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_211744) do
+ActiveRecord::Schema.define(version: 2020_06_26_004808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,9 @@ ActiveRecord::Schema.define(version: 2020_05_28_211744) do
     t.datetime "started_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "turn_id"
     t.index ["key"], name: "index_games_on_key"
+    t.index ["turn_id"], name: "index_games_on_turn_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -97,6 +99,8 @@ ActiveRecord::Schema.define(version: 2020_05_28_211744) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "ordering"
+    t.index ["game_id", "ordering"], name: "index_players_on_game_id_and_ordering", unique: true
     t.index ["game_id"], name: "index_players_on_game_id"
     t.index ["user_id"], name: "index_players_on_user_id"
   end
@@ -126,6 +130,18 @@ ActiveRecord::Schema.define(version: 2020_05_28_211744) do
     t.index ["orientation_id"], name: "index_tiles_on_orientation_id"
     t.index ["tile_variant_id"], name: "index_tiles_on_tile_variant_id"
     t.index ["x", "y", "game_id"], name: "index_tiles_on_x_and_y_and_game_id", unique: true
+  end
+
+  create_table "turns", force: :cascade do |t|
+    t.bigint "player_id", null: false
+    t.bigint "tile_id", null: false
+    t.datetime "tile_played_at"
+    t.datetime "meeple_played_at"
+    t.datetime "ended_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["player_id"], name: "index_turns_on_player_id"
+    t.index ["tile_id"], name: "index_turns_on_tile_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -164,8 +180,11 @@ ActiveRecord::Schema.define(version: 2020_05_28_211744) do
   add_foreign_key "edges", "road_segments"
   add_foreign_key "edges", "tiles"
   add_foreign_key "field_regions", "fields"
+  add_foreign_key "games", "turns"
   add_foreign_key "players", "games"
   add_foreign_key "players", "users"
   add_foreign_key "road_segments", "roads"
   add_foreign_key "tiles", "games"
+  add_foreign_key "turns", "players"
+  add_foreign_key "turns", "tiles"
 end

@@ -1,1 +1,6 @@
-<%= react_component("Game", game: render_json_partial(@game)) %>
+<%=
+    react_component(
+        "Game",
+        current_player: render_json_api_partial('current_players/current_player', current_player: @current_player)
+    )
+%>

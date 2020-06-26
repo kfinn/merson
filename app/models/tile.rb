@@ -8,6 +8,8 @@ class Tile < ApplicationRecord
     has_many :city_regions, -> { distinct }, through: :edges
     has_many :road_segments, -> { distinct }, through: :edges
 
+    has_one :turn
+
     belongs_to_active_hash :orientation
     belongs_to_active_hash :tile_variant
 

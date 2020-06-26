@@ -3,11 +3,12 @@ import React from 'react';
 import { Game } from './Game';
 import NextTileFormSvg from './NextTileFormSvg';
 import PlayedTileSvg, { TILE_RADIUS, TILE_SIZE } from './PlayedTileSvg';
+import { Point } from '../models/Point';
 
 const BORDER_RADIUS = 100
 
-export default function BoardSvg({ game }: { game: Game }) {
-    const { playedTiles, availableNextTilePositions } = game
+export default function BoardSvg({ game, availableNextTilePositions }: { game: Game, availableNextTilePositions: Point[] }) {
+    const playedTiles = game.playedTiles
 
     const xCoordinates = _.map(playedTiles, 'x')
     const yCoordinates = _.map(playedTiles, 'y')
@@ -31,7 +32,7 @@ export default function BoardSvg({ game }: { game: Game }) {
                     <PlayedTileSvg key={playedTile.id} playedTile={playedTile} />
                 ))
             }
-            <NextTileFormSvg game={game} />
+            <NextTileFormSvg game={game} availableNextTilePositions={availableNextTilePositions} />
         </svg>
     </React.Fragment>
 }

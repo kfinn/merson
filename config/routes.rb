@@ -10,8 +10,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :games, only: :show do
-        resources :next_tile_plays, only: :create
+      resources :games, only: [] do
+        resource :current_player, only: :show
+        resources :tile_plays, only: :create
+        resource :game_start, only: :create
       end
     end
   end

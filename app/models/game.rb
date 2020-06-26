@@ -3,11 +3,15 @@ class Game < ApplicationRecord
 
     has_many :tiles
     has_many :played_tiles, -> { played }, class_name: 'Tile'
-    has_one :next_tile, -> { upcoming }, class_name: 'Tile'
 
     has_many :unoccupied_played_tile_edges, -> { unoccupied }, through: :played_tiles, source: :edges
 
+    belongs_to :turn, optional: true
+    has_many :turns, through: :players
+
     before_validation :generate!, on: :create
+
+    after_save :changed!
 
     def started?
         started_at.present?
@@ -17,12 +21,16 @@ class Game < ApplicationRecord
         !started?
     end
 
-    def available_next_tile_positions
-        @available_next_tile_positions ||= unoccupied_played_tile_edges.includes(:tile).map(&:facing_position).uniq
-    end
-
     def changed!
         GamesChannel.broadcast_to(self, {})
+    end
+
+    def end_turn!
+        transaction do
+            next_turn = turn.build_next_turn
+            next_turn.save!
+            update! turn: next_turn
+        end
     end
 
     private
