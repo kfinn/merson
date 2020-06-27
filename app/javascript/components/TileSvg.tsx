@@ -65,16 +65,39 @@ enum TileVariantId {
     FOUR_ROADS = 'four_roads',
 }
 
-export interface FieldRegion {
+export interface FieldRegion extends TileFeature {
     id: number
+    type: TileFeatureType.FIELD_REGION
 }
 
-export interface CityRegion {
+export interface CityRegion extends TileFeature {
     id: number
+    type: TileFeatureType.CITY_REGION
 }
 
-export interface RoadSegment {
+export interface RoadSegment extends TileFeature {
     id: number
+    type: TileFeatureType.ROAD_SEGMENT
+}
+
+export interface TileFeature {
+    id: number
+    type: TileFeatureType
+    meeplePlay?: MeeplePlay
+}
+
+export interface MeeplePlay {
+    id: number
+    meepleIndex: number
+    player: {
+        id: number
+    }
+}
+
+export enum TileFeatureType {
+    FIELD_REGION = 'FieldRegion',
+    CITY_REGION = 'CityRegion',
+    ROAD_SEGMENT = 'RoadSegment'
 }
 
 const TILE_VARIANTS_BY_ID = {

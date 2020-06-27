@@ -4,8 +4,6 @@ import { ORIENTATION_NORTH, ORIENTATION_SOUTH } from "../../models/Orientation";
 import HalfTileField from "./shared/HalfTileField";
 import HorizontalThruRoad from "./shared/HorizontalThruRoad";
 import TileVariantProps from './TileVariantProps';
-import { useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
-
 
 export default function StraightRoadSvg({ tile }: TileVariantProps) {
     const westRoadEdge = tile.westEdge as RoadEdge
@@ -16,12 +14,12 @@ export default function StraightRoadSvg({ tile }: TileVariantProps) {
     return <g>
         <HalfTileField
             orientation={ORIENTATION_NORTH}
-            onClick={useCreateFieldRegionMeeplePlay(northFieldRegion)}
+            fieldRegion={northFieldRegion}
         />
-        <HorizontalThruRoad />
+        <HorizontalThruRoad roadSegment={roadSegment} />
         <HalfTileField
             orientation={ORIENTATION_SOUTH}
-            onClick={useCreateFieldRegionMeeplePlay(southFieldRegion)}
+            fieldRegion={southFieldRegion}
         />
     </g>
 }

@@ -19,6 +19,7 @@ class Player < ApplicationRecord
         :can_end_turn?,
         :available_field_regions,
         :available_city_regions,
+        :available_road_segments,
         to: :current_turn,
         allow_nil: true
     )

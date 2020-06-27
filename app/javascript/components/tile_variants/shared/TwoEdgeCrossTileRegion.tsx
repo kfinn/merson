@@ -1,11 +1,12 @@
 import React from 'react';
-import { actionableClassNames } from './tileFeatureActions';
+import { actionableClassNames, useCreateTileFeatureMeeplePlay, tileFeatureClassNames } from './tileFeatureActions';
+import { TileFeature } from '../../TileSvg';
 
 export enum Axis {
     HORIZONTAL, VERTICAL
 }
 
-function axisTransform(axis) {
+function axisTransform(axis: Axis) {
     switch(axis) {
         case Axis.HORIZONTAL:
             return ''
@@ -14,9 +15,10 @@ function axisTransform(axis) {
     }
 }
 
-export default function TwoEdgeCrossTileRegion({ className, axis, onClick }: { className: string, axis: Axis, onClick?: () => void }) {
+export default function TwoEdgeCrossTileRegion({ tileFeature, axis }: { tileFeature: TileFeature, axis: Axis }) {
+    const onClick = useCreateTileFeatureMeeplePlay(tileFeature)
     return <path
-        className={actionableClassNames(className, onClick)}
+        className={tileFeatureClassNames(tileFeature, onClick)}
         d="M -50 -50 C -12.5 -12.5, 12.5 -12.5, 50 -50 L 50 50 C 12.5 12.5, -12.5 12.5, -50 50 L -50 -50"
         transform={axisTransform(axis)}
         onClick={onClick}

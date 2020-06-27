@@ -1,9 +1,8 @@
 import React from 'react';
-import Shield, { ShieldPosition } from './shared/Shield';
-import TileVariantProps from './TileVariantProps';
 import { CityEdge } from '../../models/Edge';
-import { useCreateCityRegionMeeplePlay, cityClassNames } from './shared/tileFeatureActions';
-
+import Shield, { ShieldPosition } from './shared/Shield';
+import { cityClassNames, useCreateCityRegionMeeplePlay } from './shared/tileFeatureActions';
+import TileVariantProps from './TileVariantProps';
 
 export default function SingleAllSidesCityWithShieldSvg({ tile }: TileVariantProps) {
     const cityRegion = (tile.northEdge as CityEdge).cityRegion

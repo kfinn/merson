@@ -6,9 +6,7 @@ import FieldWithinAdjacentTerminalRoads from "./shared/FieldWithinAdjacentTermin
 import HalfTileField from "./shared/HalfTileField";
 import RoadTerminus from "./shared/RoadTerminus";
 import TerminalRoad from "./shared/TerminalRoad";
-import { useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TileVariantProps from './TileVariantProps';
-
 
 export default function ThreeRoadsSvg({ tile }: TileVariantProps) {
     const northFieldRegion = (tile.northEdge as FieldEdge).fieldRegion
@@ -22,20 +20,20 @@ export default function ThreeRoadsSvg({ tile }: TileVariantProps) {
     const southEastFieldRegion = southRoadEdge.leftFieldRegion
 
     return <g>
-        <TerminalRoad orientation={ORIENTATION_WEST} />
-        <TerminalRoad orientation={ORIENTATION_EAST} />
-        <TerminalRoad orientation={ORIENTATION_SOUTH} />
+        <TerminalRoad orientation={ORIENTATION_WEST} roadSegment={westRoadSegment} />
+        <TerminalRoad orientation={ORIENTATION_EAST} roadSegment={eastRoadSegment} />
+        <TerminalRoad orientation={ORIENTATION_SOUTH} roadSegment={southRoadSegment} />
         <HalfTileField
             orientation={ORIENTATION_NORTH}
-            onClick={useCreateFieldRegionMeeplePlay(northFieldRegion)}
+            fieldRegion={northFieldRegion}
         />
         <FieldWithinAdjacentTerminalRoads
             corner={Corner.SOUTH_WEST}
-            onClick={useCreateFieldRegionMeeplePlay(southWestFieldRegion)}
+            fieldRegion={southWestFieldRegion}
         />
         <FieldWithinAdjacentTerminalRoads
             corner={Corner.SOUTH_EAST}
-            onClick={useCreateFieldRegionMeeplePlay(southEastFieldRegion)}
+            fieldRegion={southEastFieldRegion}
         />
         <RoadTerminus />
     </g>

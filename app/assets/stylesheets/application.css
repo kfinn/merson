@@ -49,19 +49,27 @@
  }
 
  .city {
+     z-index: 50;
      fill: chocolate;
  }
 
  .field {
-     fill: green;
+    z-index: 50;
+    fill: green;
  }
 
  .road {
-     fill: gray;
+    z-index: 50;
+    fill: gray;
  }
 
  .has-action {
      stroke: black;
      stroke-width: 2px;
      cursor: pointer;
+ }
+
+ .meeple {
+     fill: white;
+     z-index: 100;
  }

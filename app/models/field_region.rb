@@ -27,10 +27,6 @@ class FieldRegion < ApplicationRecord
         SQL
     end
 
-    def self.with_meeple_play
-        where id: MeeplePlay.where(tile_feature_type: name).select(:tile_feature_id)
-    end
-
     def has_meeple_play?
         meeple_play.present?
     end

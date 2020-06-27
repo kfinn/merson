@@ -38,4 +38,8 @@ json.available_city_regions current_player.available_city_regions do |city_regio
     json.partial! city_region
 end
 
+json.available_road_segments current_player.available_road_segments do |road_segment|
+    json.partial! road_segment
+end
+
 json.can_end_turn current_player.can_end_turn?

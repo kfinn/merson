@@ -1,7 +1,1 @@
-json.(field_region, :id)
-
-if field_region.meeple_play.present?
-    json.meeple_play do
-        json.partial! field_region.meeple_play
-    end
-end
+json.partial! 'api/v1/tile_features/tile_feature', tile_feature: field_region

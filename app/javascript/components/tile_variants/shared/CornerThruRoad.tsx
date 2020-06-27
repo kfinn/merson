@@ -1,5 +1,8 @@
 import React from "react";
 import { Corner } from "../../../models/Corner";
+import { useCreateRoadSegmentMeeplePlay, roadSegmentClassNames } from "./tileFeatureActions";
+import { RoadSegment } from "../../TileSvg";
+import Meeple from "./Meeple";
 
 export function cornerTransformForCornerThruRoad(corner: Corner) {
     switch(corner) {
@@ -14,10 +17,36 @@ export function cornerTransformForCornerThruRoad(corner: Corner) {
     }
 }
 
-export default function CornerThruRoad({ corner }: { corner: Corner }) {
-    return <path
-        className="road"
-        d="M -50 -11 Q 11 -11 11 50 L -11 50 Q -11 11 -50 11 Z"
-        transform={cornerTransformForCornerThruRoad(corner)}
-    />
+export function cornerMeeplePositionForCornerThruRoad(corner: Corner) {
+    switch(corner) {
+        case Corner.NORTH_EAST:
+            return { x: 25, y: -25 }
+        case Corner.SOUTH_EAST:
+            return { x: 25, y: 25 }
+        case Corner.SOUTH_WEST:
+            return { x: -25, y: 25 }
+        case Corner.NORTH_WEST:
+            return { x: -25, y: -25 }
+    }
+}
+
+export default function CornerThruRoad({ corner, roadSegment }: { corner: Corner, roadSegment?: RoadSegment }) {
+    const onClick = useCreateRoadSegmentMeeplePlay(roadSegment)
+
+    return <g>
+        <path
+            className={roadSegmentClassNames(onClick)}
+            d="M -50 -11 Q 11 -11 11 50 L -11 50 Q -11 11 -50 11 Z"
+            transform={cornerTransformForCornerThruRoad(corner)}
+            onClick={onClick}
+        />
+        {
+            roadSegment.meeplePlay && (
+                <Meeple
+                    meeplePlay={roadSegment.meeplePlay}
+                    position={cornerMeeplePositionForCornerThruRoad(corner)}
+                />
+            )
+        }
+    </g>
 }

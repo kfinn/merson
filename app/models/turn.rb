@@ -39,7 +39,7 @@ class Turn < ApplicationRecord
     end
 
     def completed?
-        ended? || (!can_play_next_tile? && available_tile_features.empty?)
+        ended? || (tile_played? && available_tile_features.empty?)
     end
 
     def build_next_turn
@@ -58,7 +58,7 @@ class Turn < ApplicationRecord
     end
 
     def available_tile_features
-        @available_tile_features ||= available_city_regions + available_field_regions
+        @available_tile_features ||= available_city_regions + available_field_regions + available_road_segments
     end
 
     def available_field_regions
@@ -81,6 +81,17 @@ class Turn < ApplicationRecord
             end
         end
         @available_city_regions
+    end
+
+    def available_road_segments
+        unless instance_variable_defined?(:@available_road_segments)
+            if !can_play_meeple?
+                @available_road_segments = []
+            else
+                @available_road_segments = tile.road_segments.with_unoccupied_road
+            end
+        end
+        @available_road_segments
     end
 
     def tile_played?

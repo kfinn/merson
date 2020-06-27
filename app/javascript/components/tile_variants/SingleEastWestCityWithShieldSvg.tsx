@@ -3,7 +3,6 @@ import Shield, { ShieldPosition } from "./shared/Shield";
 import SingleEastWestCity from "./SingleEastWestCitySvg";
 import TileVariantProps from './TileVariantProps';
 
-
 export default function SingleEastWestCityWithShieldSvg({ tile }: TileVariantProps) {
     return <g>
         <SingleEastWestCity tile={tile} />

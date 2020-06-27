@@ -1,10 +1,12 @@
 import React from "react";
-import { cornerTransformForCornerThruRoad } from "./CornerThruRoad";
 import { Corner } from "../../../models/Corner";
-import classNames from "classnames";
-import { fieldClassNames } from "./tileFeatureActions";
+import { cornerTransformForCornerThruRoad } from "./CornerThruRoad";
+import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./tileFeatureActions";
+import { FieldRegion } from "../../TileSvg";
 
-export default function FieldWithinAdjacentTerminalRoads({ corner, onClick }: { corner: Corner, onClick?: () => void }) {
+export default function FieldWithinAdjacentTerminalRoads({ corner, fieldRegion }: { corner: Corner, fieldRegion: FieldRegion }) {
+    const onClick = useCreateFieldRegionMeeplePlay(fieldRegion)
+
     return <rect
         className={fieldClassNames(onClick)}
         x="-50"
