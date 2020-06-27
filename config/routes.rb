@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       resources :field_regions, only: [] do
         resource :field_region_meeple_play, only: :create
       end
+      resources :city_regions, only: [] do
+        resource :city_region_meeple_play, only: :create
+      end
     end
   end
 end

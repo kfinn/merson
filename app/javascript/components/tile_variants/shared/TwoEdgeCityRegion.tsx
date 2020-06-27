@@ -1,5 +1,6 @@
 import React from 'react';
 import { Corner } from '../../../models/Corner';
+import { cityClassNames } from './tileFeatureActions';
 
 export function cornerTransform(corner: Corner) {
     switch (corner) {
@@ -14,10 +15,11 @@ export function cornerTransform(corner: Corner) {
     }
 }
 
-export default function TwoEdgeCityRegion({ corner }: { corner: Corner }) {
+export default function TwoEdgeCityRegion({ corner, onClick }: { corner: Corner, onClick?: () => void }) {
     return <path
-        className="city"
+        className={cityClassNames(onClick)}
         d="M -50 -50 L 50 -50 L 50 50 C 25 -25, 25 -25, -50 -50"
         transform={cornerTransform(corner)}
+        onClick={onClick}
     />
 }

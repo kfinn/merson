@@ -8,11 +8,9 @@ class FieldRegion < ApplicationRecord
     has_one :tile, through: :arbitrary_edge
     has_one :game, through: :tile
 
-    has_one :meeple_play, as: :tile_feature, inverse_of: :tile_feature
+    has_one :meeple_play, as: :tile_feature
 
     before_validation :generate_field, on: :create
-
-    delegate :occupied?, to: :field, prefix: true
 
     def self.with_unoccupied_field
         where(Arel.sql(<<~SQL.squish))
@@ -35,6 +33,10 @@ class FieldRegion < ApplicationRecord
 
     def has_meeple_play?
         meeple_play.present?
+    end
+
+    def board_feature
+        field
     end
 
     private

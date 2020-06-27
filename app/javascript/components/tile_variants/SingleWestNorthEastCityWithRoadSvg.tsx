@@ -3,7 +3,7 @@ import { CityEdge, RoadEdge } from "../../models/Edge";
 import { ORIENTATION_SOUTH } from "../../models/Orientation";
 import TerminalRoad from "./shared/TerminalRoad";
 import ThreeEdgeRegion from "./shared/ThreeEdgeRegion";
-import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
+import { fieldClassNames, useCreateFieldRegionMeeplePlay, useCreateCityRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TileVariantProps from './TileVariantProps';
 
 
@@ -36,6 +36,10 @@ export default function SingleWestNorthEastCityWithRoadSvg({ tile }: TileVariant
             onClick={onClickEastFieldRegion}
         />
         <TerminalRoad orientation={ORIENTATION_SOUTH} />
-        <ThreeEdgeRegion className="city" orientation={ORIENTATION_SOUTH} />
+        <ThreeEdgeRegion
+            className="city"
+            orientation={ORIENTATION_SOUTH}
+            onClick={useCreateCityRegionMeeplePlay(cityRegion)}
+        />
     </g>
 }

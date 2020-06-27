@@ -1,16 +1,16 @@
 import React from "react";
 import { Corner } from "../../models/Corner";
-import { RoadEdge } from "../../models/Edge";
+import { RoadEdge, CityEdge } from "../../models/Edge";
 import { ORIENTATION_NORTH } from "../../models/Orientation";
 import CornerThruRoad from "./shared/CornerThruRoad";
 import FieldWithinCornerThruRoad from "./shared/FieldWithinCornerThruRoad";
 import SingleEdgeRegion from "./shared/SingleEdgeRegion";
-import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
+import { fieldClassNames, useCreateFieldRegionMeeplePlay, useCreateCityRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TileVariantProps from './TileVariantProps';
 
 
 export default function NorthernCityWithSouthwestCornerRoadSvg({ tile }: TileVariantProps) {
-    // const cityRegion = (tile.northEdge as CityEdge).cityRegion
+    const cityRegion = (tile.northEdge as CityEdge).cityRegion
 
     const westRoadEdge = tile.westEdge as RoadEdge
     const outerFieldRegion = westRoadEdge.rightFieldRegion
@@ -20,7 +20,11 @@ export default function NorthernCityWithSouthwestCornerRoadSvg({ tile }: TileVar
     const onClickOuterFieldRegion = useCreateFieldRegionMeeplePlay(outerFieldRegion)
 
     return <g>
-        <SingleEdgeRegion className="city" orientation={ORIENTATION_NORTH} />
+        <SingleEdgeRegion
+            className="city"
+            orientation={ORIENTATION_NORTH}
+            onClick={useCreateCityRegionMeeplePlay(cityRegion)}
+        />
         <path
             className={fieldClassNames(onClickOuterFieldRegion)}
             d="M -50 -11 Q 11 -11 11 50 L 50 50 L 50 -50 C 12.5 -12.5, -12.5 -12.5, -50 -50 Z"

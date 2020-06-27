@@ -8,7 +8,7 @@ import CurrentPlayerStatus from './CurrentPlayerStatus';
 import EndTurnButton from './EndTurnButton';
 import { PlayedTile } from './PlayedTileSvg';
 import StartGameButton from './StartGameButton';
-import { FieldRegion, Tile } from './TileSvg';
+import { FieldRegion, Tile, CityRegion } from './TileSvg';
 
 export const AvailableActionsContext = React.createContext({
     availableNextTilePositions: [],
@@ -26,6 +26,7 @@ export interface CurrentPlayer extends Player, AvailableActions {
 export interface AvailableActions {
     availableNextTilePositions: Point[]
     availableFieldRegions: FieldRegion[]
+    availableCityRegions: CityRegion[]
     canEndTurn: boolean
 }
 

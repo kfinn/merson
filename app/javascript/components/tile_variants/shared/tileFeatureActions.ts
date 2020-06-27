@@ -1,5 +1,5 @@
 import Api from "../../../models/Api"
-import { FieldRegion } from "../../TileSvg"
+import { FieldRegion, CityRegion } from "../../TileSvg"
 import { useContext } from "react"
 import { AvailableActionsContext } from "../../Game"
 import _ from "lodash"
@@ -17,6 +17,18 @@ export function useCreateFieldRegionMeeplePlay(fieldRegion: FieldRegion) {
     return null
 }
 
+export function useCreateCityRegionMeeplePlay(cityRegion: CityRegion) {
+    const { availableCityRegions } = useContext(AvailableActionsContext)
+    if (_.some(availableCityRegions, (availableCityRegion) => availableCityRegion.id == cityRegion.id)) {
+        return () => {
+            Api
+                .post(`city_regions/${cityRegion.id}/city_region_meeple_play`)
+                .catch(console.log)
+        }
+    }
+    return null
+}
+
 export function actionableClassNames(className: string, hasAction: any) {
     return classNames(
         className,
@@ -26,4 +38,8 @@ export function actionableClassNames(className: string, hasAction: any) {
 
 export function fieldClassNames(hasAction: any) {
     return actionableClassNames('field', hasAction)
+}
+
+export function cityClassNames(hasAction: any) {
+    return actionableClassNames('city', hasAction)
 }

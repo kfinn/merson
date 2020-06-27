@@ -2,7 +2,7 @@ import React from "react";
 import { CityEdge, FieldEdge } from "../../models/Edge";
 import { ORIENTATION_NORTH, ORIENTATION_SOUTH } from "../../models/Orientation";
 import SingleEdgeRegion from "./shared/SingleEdgeRegion";
-import { useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
+import { useCreateFieldRegionMeeplePlay, useCreateCityRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TwoEdgeCrossTileRegion, { Axis } from "./shared/TwoEdgeCrossTileRegion";
 import TileVariantProps from './TileVariantProps';
 
@@ -13,12 +13,20 @@ export default function TwoNorthSouthCitiesSvg({ tile }: TileVariantProps) {
     const southCityRegion = (tile.southEdge as CityEdge).cityRegion
 
     return <g>
-        <SingleEdgeRegion className="city" orientation={ORIENTATION_NORTH} />
+        <SingleEdgeRegion
+            className="city"
+            orientation={ORIENTATION_NORTH}
+            onClick={useCreateCityRegionMeeplePlay(northCityRegion)}
+        />
         <TwoEdgeCrossTileRegion
             className="field"
             axis={Axis.HORIZONTAL}
             onClick={useCreateFieldRegionMeeplePlay(fieldRegion)}
         />
-        <SingleEdgeRegion className="city" orientation={ORIENTATION_SOUTH} />
+        <SingleEdgeRegion
+            className="city"
+            orientation={ORIENTATION_SOUTH}
+            onClick={useCreateCityRegionMeeplePlay(southCityRegion)}
+        />
     </g>
 }

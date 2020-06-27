@@ -34,4 +34,8 @@ json.available_field_regions current_player.available_field_regions do |field_re
     json.partial! field_region
 end
 
+json.available_city_regions current_player.available_city_regions do |city_region|
+    json.partial! city_region
+end
+
 json.can_end_turn current_player.can_end_turn?

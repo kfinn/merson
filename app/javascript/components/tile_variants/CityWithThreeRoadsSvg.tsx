@@ -1,18 +1,18 @@
 import React from "react";
 import { Corner } from "../../models/Corner";
-import { RoadEdge } from "../../models/Edge";
+import { CityEdge, RoadEdge } from "../../models/Edge";
 import { ORIENTATION_EAST, ORIENTATION_NORTH, ORIENTATION_SOUTH, ORIENTATION_WEST } from "../../models/Orientation";
 import FieldWithinAdjacentTerminalRoads from "./shared/FieldWithinAdjacentTerminalRoads";
 import HalfTileFieldAvoidingCity from "./shared/HalfTileFieldAvoidingCity";
 import RoadTerminus from "./shared/RoadTerminus";
 import SingleEdgeRegion from "./shared/SingleEdgeRegion";
 import TerminalRoad from "./shared/TerminalRoad";
-import { useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
+import { useCreateFieldRegionMeeplePlay, useCreateCityRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TileVariantProps from './TileVariantProps';
 
 
 export default function CityWithThreeRoadsSvg({ tile }: TileVariantProps) {
-    // const cityRegion = (tile.northEdge as CityEdge).cityRegion
+    const cityRegion = (tile.northEdge as CityEdge).cityRegion
 
     const westRoadEdge = tile.westEdge as RoadEdge
     const northFieldRegion = westRoadEdge.rightFieldRegion
@@ -26,7 +26,11 @@ export default function CityWithThreeRoadsSvg({ tile }: TileVariantProps) {
     // const eastRoadSegment = eastRoadEdge.roadSegment
 
     return <g>
-        <SingleEdgeRegion className="city" orientation={ORIENTATION_NORTH} />
+        <SingleEdgeRegion
+            className="city"
+            orientation={ORIENTATION_NORTH}
+            onClick={useCreateCityRegionMeeplePlay(cityRegion)}
+        />
         <HalfTileFieldAvoidingCity
             orientation={ORIENTATION_NORTH}
             onClick={useCreateFieldRegionMeeplePlay(northFieldRegion)}

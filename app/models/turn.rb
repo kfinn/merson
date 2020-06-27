@@ -24,7 +24,10 @@ class Turn < ApplicationRecord
     end
 
     def can_play_meeple?
-        current? && tile_played? && !meeple_played? && player_has_meeple?
+        current? &&
+            tile_played? &&
+            !meeple_played? &&
+            player_has_meeple?
     end
 
     def can_play_meeple_on_tile_feature?(tile_feature)
@@ -36,7 +39,7 @@ class Turn < ApplicationRecord
     end
 
     def completed?
-        ended? || tile_played? && meeple_played?
+        ended? || (!can_play_next_tile? && available_tile_features.empty?)
     end
 
     def build_next_turn
@@ -54,6 +57,10 @@ class Turn < ApplicationRecord
         @available_next_tile_positions
     end
 
+    def available_tile_features
+        @available_tile_features ||= available_city_regions + available_field_regions
+    end
+
     def available_field_regions
         unless instance_variable_defined?(:@available_field_regions)
             if !can_play_meeple?
@@ -63,6 +70,17 @@ class Turn < ApplicationRecord
             end
         end
         @available_field_regions
+    end
+
+    def available_city_regions
+        unless instance_variable_defined?(:@available_city_regions)
+            if !can_play_meeple?
+                @available_city_regions = []
+            else
+                @available_city_regions = tile.city_regions.with_unoccupied_city
+            end
+        end
+        @available_city_regions
     end
 
     def tile_played?

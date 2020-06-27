@@ -1,4 +1,6 @@
 class Player < ApplicationRecord
+    MEEPLES_PER_PLAYER = 8
+
     include GameChanging
 
     belongs_to :user
@@ -16,6 +18,7 @@ class Player < ApplicationRecord
         :can_play_meeple_on_tile_feature?,
         :can_end_turn?,
         :available_field_regions,
+        :available_city_regions,
         to: :current_turn,
         allow_nil: true
     )
@@ -37,6 +40,6 @@ class Player < ApplicationRecord
     end
 
     def has_meeple?
-        meeple_plays.size < MeeplePlay::MEEPLES_PER_PLAYER
+        meeple_plays.size < MEEPLES_PER_PLAYER
     end
 end
