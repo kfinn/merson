@@ -1,4 +1,5 @@
 import { Orientation } from "./Orientation";
+import { FieldRegion, CityRegion, RoadSegment } from "../components/TileSvg";
 
 export interface Edge {
     id: number
@@ -8,8 +9,19 @@ export interface Edge {
 
 export interface RoadEdge extends Edge {
     type: EdgeType.ROAD_EDGE
-    leftFieldRegion: { id: number }
-    rightFieldRegion: { id: number }
+    leftFieldRegion: FieldRegion
+    rightFieldRegion: FieldRegion
+    roadSegment: RoadSegment
+}
+
+export interface FieldEdge extends Edge {
+    type: EdgeType.FIELD_EDGE
+    fieldRegion: FieldRegion
+}
+
+export interface CityEdge extends Edge {
+    type: EdgeType.CITY_EDGE
+    cityRegion: CityRegion
 }
 
 enum EdgeType {

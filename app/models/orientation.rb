@@ -43,4 +43,14 @@ class Orientation < ActiveHash::Base
     def -@
         self.class.from_rotation(rotation + 180)
     end
+
+    
+
+    def edge_relation_name
+        "#{id}_edge".to_sym
+    end
+
+    def edge_scope_name
+        id.to_sym
+    end
 end

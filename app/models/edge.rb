@@ -1,5 +1,6 @@
 class Edge < ApplicationRecord
     belongs_to :tile
+    has_one :game, through: :tile
     belongs_to_active_hash :orientation
 
     has_many :edge_field_regions
@@ -15,8 +16,18 @@ class Edge < ApplicationRecord
     has_one :right_edge_field_region, -> { right_of_road }, class_name: 'EdgeFieldRegion', foreign_key: :edge_id
     has_one :right_field_region, through: :right_edge_field_region, source: :field_region
 
+    scope :played, -> { where tile: Tile.played }
+
     def self.unoccupied
         where.not(id: EdgePairMember.all.select(:edge_id))
+    end
+
+    def self.playable
+        where type: played.unoccupied.select(:type)
+    end
+
+    Orientation.all.each do |orientation|
+        scope orientation.edge_scope_name, -> { where orientation_id: orientation.id }
     end
 
     Position = Struct.new(:x, :y)

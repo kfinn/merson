@@ -7,9 +7,18 @@ class Player < ApplicationRecord
     has_many :turns
     has_one :current_turn, -> { current }, class_name: 'Turn'
 
+    has_many :meeple_plays
+
     scope :ordered, -> { order :ordering }
 
-    delegate :can_play_next_tile?, to: :current_turn, allow_nil: true
+    delegate(
+        :can_play_next_tile?,
+        :can_play_meeple_on_tile_feature?,
+        :can_end_turn?,
+        :available_field_regions,
+        to: :current_turn,
+        allow_nil: true
+    )
 
     def name
         super || "Player #{id}"
@@ -25,5 +34,9 @@ class Player < ApplicationRecord
 
     def available_next_tile_positions
         current_turn&.available_next_tile_positions || []
+    end
+
+    def has_meeple?
+        meeple_plays.size < MeeplePlay::MEEPLES_PER_PLAYER
     end
 end

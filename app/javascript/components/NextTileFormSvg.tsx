@@ -1,11 +1,12 @@
-import _, { initial } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
 import AvailableNextTilePositionSvg from './AvailableNextTilePositionSvg';
-import { Game } from './Game';
+import { AvailableActionsContext, Game } from './Game';
 import NextTileSvg from './NextTileSvg';
-import { Point } from '../models/Point';
 
-export default function NextTileFormSvg({ game, availableNextTilePositions }: { game: Game, availableNextTilePositions: Point[] }) {
+export default function NextTileFormSvg({ game }: { game: Game }) {
+    const { availableNextTilePositions } = useContext(AvailableActionsContext)
+
     const getInitialNextTilePosition = () => {
         if (_.some(availableNextTilePositions)) {
             const xPositions = _.uniq(_.map(availableNextTilePositions, 'x'))

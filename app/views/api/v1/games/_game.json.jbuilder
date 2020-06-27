@@ -4,7 +4,7 @@ json.played_tiles game.played_tiles do |tile|
     json.partial! tile
 end
 
-if game.turn
+if game.turn && !game.turn.tile.played?
     json.turn do
         json.tile do
             json.partial! game.turn.tile

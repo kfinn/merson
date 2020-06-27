@@ -1,11 +1,21 @@
 import React from 'react';
 import { Corner } from '../../models/Corner';
+import { CityEdge, FieldEdge } from '../../models/Edge';
+import { useCreateFieldRegionMeeplePlay } from './shared/tileFeatureActions';
 import TwoEdgeCityRegion from './shared/TwoEdgeCityRegion';
 import TwoEdgeFieldRegion from './shared/TwoEdgeFieldRegion';
+import TileVariantProps from './TileVariantProps';
 
-export default function SingleNorthEastCitySvg() {
+
+export default function SingleNorthEastCitySvg({ tile }: TileVariantProps) {
+    const cityRegion = (tile.northEdge as CityEdge).cityRegion
+    const fieldRegion = (tile.southEdge as FieldEdge).fieldRegion
+
     return <g>
         <TwoEdgeCityRegion corner={Corner.NORTH_EAST} />
-        <TwoEdgeFieldRegion corner={Corner.SOUTH_WEST} />
+        <TwoEdgeFieldRegion
+            corner={Corner.SOUTH_WEST}
+            onClick={useCreateFieldRegionMeeplePlay(fieldRegion)}
+        />
     </g>
 }

@@ -4,8 +4,21 @@ class Tile < ApplicationRecord
     belongs_to :game
 
     has_many :edges
-    has_many :field_regions, -> { distinct }, through: :edges
+
+    Orientation.all.each do |orientation|
+        has_one(
+            orientation.edge_relation_name,
+            -> { public_send(orientation.edge_scope_name) },
+            class_name: 'Edge'
+        )
+    end
+
+    def self.includes_edge_specific_turns
+        includes(*Orientation.all.map(&:edge_relation_name))
+    end
+
     has_many :city_regions, -> { distinct }, through: :edges
+    has_many :field_regions, -> { distinct }, through: :edges
     has_many :road_segments, -> { distinct }, through: :edges
 
     has_one :turn
@@ -20,6 +33,7 @@ class Tile < ApplicationRecord
     scope :played, -> { where.not(x: nil).where.not(y: nil) }
     scope :unplayed, -> { where(x: nil, y: nil) }
     scope :upcoming, -> { unplayed.order(:ordering) }
+    scope :playable, -> { where(id: Edge.playable.select(:tile_id)) }
 
     def tile_variant=(tile_variant)
         self.tile_variant_id=tile_variant.id
@@ -27,7 +41,15 @@ class Tile < ApplicationRecord
     end
 
     def edge_with_absolute_orientation(orientation)
-        edges.find_by!(orientation_id: (orientation - self.orientation).id)
+        edge_with_relative_orientation(orientation - self.orientation)
+    end
+
+    def edge_with_relative_orientation(orientation)
+        public_send(orientation.edge_relation_name)
+    end
+
+    def played?
+        x.present? && y.present?
     end
 
     private

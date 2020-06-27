@@ -14,6 +14,10 @@ Rails.application.routes.draw do
         resource :current_player, only: :show
         resources :tile_plays, only: :create
         resource :game_start, only: :create
+        resources :current_turn_ends, only: :create
+      end
+      resources :field_regions, only: [] do
+        resource :field_region_meeple_play, only: :create
       end
     end
   end

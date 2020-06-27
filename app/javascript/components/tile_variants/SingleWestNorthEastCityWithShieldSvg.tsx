@@ -1,10 +1,12 @@
 import React from "react";
-import SingleWestNorthEastCitySvg from "./SingleWestNorthEastCitySvg";
 import Shield, { ShieldPosition } from "./shared/Shield";
+import SingleWestNorthEastCitySvg from "./SingleWestNorthEastCitySvg";
+import TileVariantProps from './TileVariantProps';
 
-export default function SingleWestNorthEastCityWithShieldSvg() {
+
+export default function SingleWestNorthEastCityWithShieldSvg({ tile }: TileVariantProps) {
     return <g>
-        <SingleWestNorthEastCitySvg />
+        <SingleWestNorthEastCitySvg tile={tile} />
         <Shield shieldPosition={ShieldPosition.MID_CENTER} />
     </g>
 }

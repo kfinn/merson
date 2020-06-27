@@ -1,12 +1,40 @@
 import React from "react";
+import { CityEdge, RoadEdge } from "../../models/Edge";
 import { ORIENTATION_SOUTH } from "../../models/Orientation";
-import ThreeEdgeRegion from "./shared/ThreeEdgeRegion";
 import TerminalRoad from "./shared/TerminalRoad";
+import ThreeEdgeRegion from "./shared/ThreeEdgeRegion";
+import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
+import TileVariantProps from './TileVariantProps';
 
-export default function SingleWestNorthEastCityWithRoadSvg() {
+
+export default function SingleWestNorthEastCityWithRoadSvg({ tile }: TileVariantProps) {
+    const cityRegion = (tile.northEdge as CityEdge).cityRegion
+
+    const southRoadEdge = tile.southEdge as RoadEdge
+    const westFieldRegion = southRoadEdge.rightFieldRegion
+    const roadSegment = southRoadEdge.roadSegment
+    const eastFieldRegion = southRoadEdge.leftFieldRegion
+
+    const onClickWestFieldRegion = useCreateFieldRegionMeeplePlay(westFieldRegion)
+    const onClickEastFieldRegion = useCreateFieldRegionMeeplePlay(eastFieldRegion)
+
     return <g>
-        <rect className="field" x="-50" y="20" width="45" height="30" />
-        <rect className="field" x="5" y="20" width="45" height="30" />
+        <rect
+            className={fieldClassNames(onClickWestFieldRegion)}
+            x="-50"
+            y="20"
+            width="45"
+            height="30"
+            onClick={onClickWestFieldRegion}
+        />
+        <rect
+            className={fieldClassNames(onClickEastFieldRegion)}
+            x="5"
+            y="20"
+            width="45"
+            height="30"
+            onClick={onClickEastFieldRegion}
+        />
         <TerminalRoad orientation={ORIENTATION_SOUTH} />
         <ThreeEdgeRegion className="city" orientation={ORIENTATION_SOUTH} />
     </g>

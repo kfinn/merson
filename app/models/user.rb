@@ -3,4 +3,7 @@ class User < ApplicationRecord
 
   has_many :players
   has_many :games, through: :players
+  has_many :city_regions, through: :games
+  has_many :field_regions, through: :games
+  has_many :road_segments, through: :games
 end

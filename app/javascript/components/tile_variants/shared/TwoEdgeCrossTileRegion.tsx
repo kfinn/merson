@@ -1,4 +1,5 @@
 import React from 'react';
+import { actionableClassNames } from './tileFeatureActions';
 
 export enum Axis {
     HORIZONTAL, VERTICAL
@@ -13,11 +14,12 @@ function axisTransform(axis) {
     }
 }
 
-export default function TwoEdgeCrossTileRegion({ className, axis }: { className: string, axis: Axis }) {
+export default function TwoEdgeCrossTileRegion({ className, axis, onClick }: { className: string, axis: Axis, onClick?: () => void }) {
     return <path
-        className={className}
+        className={actionableClassNames(className, onClick)}
         d="M -50 -50 C -12.5 -12.5, 12.5 -12.5, 50 -50 L 50 50 C 12.5 12.5, -12.5 12.5, -50 50 L -50 -50"
         transform={axisTransform(axis)}
+        onClick={onClick}
     />
 
 }

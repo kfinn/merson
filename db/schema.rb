@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_004808) do
+ActiveRecord::Schema.define(version: 2020_06_27_000308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,18 @@ ActiveRecord::Schema.define(version: 2020_06_26_004808) do
     t.bigint "turn_id"
     t.index ["key"], name: "index_games_on_key"
     t.index ["turn_id"], name: "index_games_on_turn_id"
+  end
+
+  create_table "meeple_plays", force: :cascade do |t|
+    t.bigint "player_id", null: false
+    t.string "tile_feature_type", null: false
+    t.bigint "tile_feature_id", null: false
+    t.integer "meeple_index"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["player_id", "meeple_index"], name: "index_meeple_plays_on_player_id_and_meeple_index", unique: true
+    t.index ["player_id"], name: "index_meeple_plays_on_player_id"
+    t.index ["tile_feature_type", "tile_feature_id"], name: "index_meeple_plays_on_tile_feature_type_and_tile_feature_id", unique: true
   end
 
   create_table "players", force: :cascade do |t|
@@ -181,6 +193,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_004808) do
   add_foreign_key "edges", "tiles"
   add_foreign_key "field_regions", "fields"
   add_foreign_key "games", "turns"
+  add_foreign_key "meeple_plays", "players"
   add_foreign_key "players", "games"
   add_foreign_key "players", "users"
   add_foreign_key "road_segments", "roads"

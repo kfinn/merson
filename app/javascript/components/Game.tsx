@@ -4,18 +4,29 @@ import React, { useEffect, useState } from 'react';
 import Api from '../models/Api';
 import { Point } from '../models/Point';
 import BoardSvg from './BoardSvg';
-import { PlayedTile } from './PlayedTileSvg';
-import { Tile } from './TileSvg';
-import StartGameButton from './StartGameButton';
 import CurrentPlayerStatus from './CurrentPlayerStatus';
+import EndTurnButton from './EndTurnButton';
+import { PlayedTile } from './PlayedTileSvg';
+import StartGameButton from './StartGameButton';
+import { FieldRegion, Tile } from './TileSvg';
 
-export interface CurrentPlayer extends Player {
+export const AvailableActionsContext = React.createContext({
+    availableNextTilePositions: [],
+    availableFieldRegions: []
+} as AvailableActions)
+
+export interface CurrentPlayer extends Player, AvailableActions {
     status: {
         actor: string
         action: string
     }
     game: Game
+}
+
+export interface AvailableActions {
     availableNextTilePositions: Point[]
+    availableFieldRegions: FieldRegion[]
+    canEndTurn: boolean
 }
 
 interface Player {
@@ -44,7 +55,7 @@ function gameIsStarted(game: Game) {
 
 export default function Game(props: { currentPlayer: CurrentPlayer }) {
     const [currentPlayer, setCurrentPlayer] = useState(props.currentPlayer)
-    const { game, availableNextTilePositions } = currentPlayer
+    const { game } = currentPlayer
 
     const refresh = async () => {
         const response = await Api.get(`/games/${game.id}/current_player`)
@@ -69,13 +80,17 @@ export default function Game(props: { currentPlayer: CurrentPlayer }) {
         return () => { subscription.disconnect() }
     }, [game.id])
 
-    return <div>
-        <CurrentPlayerStatus currentPlayer={currentPlayer} />
-        {
-            !gameIsStarted(game) && (
-                <StartGameButton game={game} />
-            )
-        }
-        <BoardSvg game={game} availableNextTilePositions={availableNextTilePositions} />
-    </div>
+    return <AvailableActionsContext.Provider value={currentPlayer}>
+        <div>
+            <CurrentPlayerStatus currentPlayer={currentPlayer} />
+            {
+                gameIsStarted(game) ? (
+                    <EndTurnButton game={game} />
+                ) : (
+                    <StartGameButton game={game} />
+                )
+            }
+            <BoardSvg game={game} />
+        </div>
+    </AvailableActionsContext.Provider>
 }

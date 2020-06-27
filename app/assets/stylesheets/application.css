@@ -59,3 +59,9 @@
  .road {
      fill: gray;
  }
+
+ .has-action {
+     stroke: black;
+     stroke-width: 2px;
+     cursor: pointer;
+ }

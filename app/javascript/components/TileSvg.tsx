@@ -26,13 +26,14 @@ import TwoNorthSouthCitiesSvg from './tile_variants/TwoNorthSouthCitiesSvg';
 
 export interface Tile {
     id: number
+    tileVariant: TileVariant
     x?: number
     y?: number
-    tileVariant: TileVariant
     orientation: Orientation
-    fieldRegions: FieldRegion[]
-    cityRegions: CityRegion[]
-    roadSegments: RoadSegment[]
+    northEdge: Edge
+    eastEdge: Edge
+    southEdge: Edge
+    westEdge: Edge
 }
 
 interface TileVariant {
@@ -66,17 +67,14 @@ enum TileVariantId {
 
 export interface FieldRegion {
     id: number
-    edges: Edge[]
 }
 
 export interface CityRegion {
     id: number
-    edges: Edge[]
 }
 
 export interface RoadSegment {
     id: number
-    edges: RoadEdge[]
 }
 
 const TILE_VARIANTS_BY_ID = {
@@ -107,6 +105,6 @@ const TILE_VARIANTS_BY_ID = {
 export default function TileSvg({ tile }: { tile: Tile }) {
     const TileVariant = TILE_VARIANTS_BY_ID[tile.tileVariant.id]
     if (TileVariant) {
-        return <TileVariant />
+        return <TileVariant tile={tile} />
     }
 }

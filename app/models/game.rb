@@ -6,6 +6,10 @@ class Game < ApplicationRecord
 
     has_many :unoccupied_played_tile_edges, -> { unoccupied }, through: :played_tiles, source: :edges
 
+    has_many :city_regions, through: :tiles
+    has_many :field_regions, through: :tiles
+    has_many :road_segments, through: :tiles
+
     belongs_to :turn, optional: true
     has_many :turns, through: :players
 
@@ -27,6 +31,7 @@ class Game < ApplicationRecord
 
     def end_turn!
         transaction do
+            turn.end!
             next_turn = turn.build_next_turn
             next_turn.save!
             update! turn: next_turn

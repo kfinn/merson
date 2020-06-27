@@ -5,18 +5,38 @@ class Turn < ApplicationRecord
 
     scope :current, -> { where id: Game.all.select(:turn_id) }
 
+    validate :must_play_tile_before_meeple
+
     before_validation :pick_next_tile, on: :create
 
+    delegate :has_meeple?, to: :player, prefix: true
+
+    def current?
+        game.turn == self
+    end
+
     def pick_next_tile
-        self.tile = game.tiles.upcoming.first
+        self.tile = game.tiles.playable.upcoming.first
     end
 
     def can_play_next_tile?
-        tile_played_at.blank?
+        current? && !tile_played?
+    end
+
+    def can_play_meeple?
+        current? && tile_played? && !meeple_played? && player_has_meeple?
+    end
+
+    def can_play_meeple_on_tile_feature?(tile_feature)
+        can_play_meeple? && tile_feature.tile == tile
+    end
+
+    def can_end_turn?
+        tile_played? && !ended?
     end
 
     def completed?
-        tile_played_at.present?
+        ended? || tile_played? && meeple_played?
     end
 
     def build_next_turn
@@ -32,5 +52,38 @@ class Turn < ApplicationRecord
             end
         end
         @available_next_tile_positions
+    end
+
+    def available_field_regions
+        unless instance_variable_defined?(:@available_field_regions)
+            if !can_play_meeple?
+                @available_field_regions = []
+            else
+                @available_field_regions = tile.field_regions.with_unoccupied_field
+            end
+        end
+        @available_field_regions
+    end
+
+    def tile_played?
+        tile_played_at.present?
+    end
+
+    def meeple_played?
+        meeple_played_at.present?
+    end
+
+    def ended?
+        ended_at.present?
+    end
+
+    def end!
+        update! ended_at: Time.zone.now
+    end
+
+    private
+
+    def must_play_tile_before_meeple
+        errors[:meeple_played_at] << 'must play tile first' if meeple_played? && !tile_played?
     end
 end
