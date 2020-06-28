@@ -71,5 +71,5 @@
 
  .meeple {
      fill: white;
-     z-index: 100;
+     text-anchor: middle;
  }

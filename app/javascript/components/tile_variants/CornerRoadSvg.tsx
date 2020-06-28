@@ -5,6 +5,7 @@ import CornerThruRoad from "./shared/CornerThruRoad";
 import FieldWithinCornerThruRoad from "./shared/FieldWithinCornerThruRoad";
 import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./shared/tileFeatureActions";
 import TileVariantProps from './TileVariantProps';
+import Meeple from "./shared/Meeple";
 
 export default function CornerRoadSvg({ tile }: TileVariantProps) {
     const westRoadEdge = tile.westEdge as RoadEdge
@@ -15,11 +16,21 @@ export default function CornerRoadSvg({ tile }: TileVariantProps) {
     const onClickOuterFieldRegion = useCreateFieldRegionMeeplePlay(outerFieldRegion)
 
     return <g>
-        <path
-            className={fieldClassNames(onClickOuterFieldRegion)}
-            d="M -50 -11 Q 11 -11 11 50 L 50 50 L 50 -50 L -50 -50 Z"
-            onClick={onClickOuterFieldRegion}
-        />
+        <g>
+            <path
+                className={fieldClassNames(onClickOuterFieldRegion)}
+                d="M -50 -11 Q 11 -11 11 50 L 50 50 L 50 -50 L -50 -50 Z"
+                onClick={onClickOuterFieldRegion}
+            />
+            {
+                outerFieldRegion.meeplePlay && (
+                    <Meeple
+                        meeplePlay={outerFieldRegion.meeplePlay}
+                        position={{ x: 12, y: 0-12 }}
+                    />
+                )
+            }
+        </g>
         <CornerThruRoad
             corner={Corner.SOUTH_WEST}
             roadSegment={roadSegment}
