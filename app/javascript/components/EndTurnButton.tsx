@@ -1,10 +1,10 @@
-import { Game, AvailableActionsContext } from "./Game";
+import { Game, CurrentPlayerContext } from "./Game";
 import Api from "../models/Api";
 import { useContext } from "react";
 import React from "react";
 
 export default function EndTurnButton({ game }: { game: Game }) {
-    const { canEndTurn } = useContext(AvailableActionsContext)
+    const { canEndTurn } = useContext(CurrentPlayerContext)
 
     const onClick = () => {
         Api.post(`games/${game.id}/current_turn_ends`)

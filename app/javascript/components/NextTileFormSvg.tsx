@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import AvailableNextTilePositionSvg from './AvailableNextTilePositionSvg';
-import { AvailableActionsContext, Game } from './Game';
+import { CurrentPlayerContext, Game } from './Game';
 import NextTileSvg from './NextTileSvg';
 
 export default function NextTileFormSvg({ game }: { game: Game }) {
-    const { availableNextTilePositions } = useContext(AvailableActionsContext)
+    const { availableNextTilePositions } = useContext(CurrentPlayerContext)
 
     const getInitialNextTilePosition = () => {
         if (_.some(availableNextTilePositions)) {

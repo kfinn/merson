@@ -1,12 +1,12 @@
 import Api from "../../../models/Api"
 import { FieldRegion, CityRegion, RoadSegment, TileFeature, TileFeatureType } from "../../TileSvg"
 import { useContext } from "react"
-import { AvailableActionsContext } from "../../Game"
+import { CurrentPlayerContext } from "../../Game"
 import _ from "lodash"
 import classNames from "classnames"
 
 export function useCreateFieldRegionMeeplePlay(fieldRegion: FieldRegion) {
-    const { availableFieldRegions } = useContext(AvailableActionsContext)
+    const { availableFieldRegions } = useContext(CurrentPlayerContext)
     if (_.some(availableFieldRegions, (availableFieldRegion) => availableFieldRegion.id == fieldRegion.id)) {
         return () => {
             Api
@@ -18,7 +18,7 @@ export function useCreateFieldRegionMeeplePlay(fieldRegion: FieldRegion) {
 }
 
 export function useCreateCityRegionMeeplePlay(cityRegion: CityRegion) {
-    const { availableCityRegions } = useContext(AvailableActionsContext)
+    const { availableCityRegions } = useContext(CurrentPlayerContext)
     if (_.some(availableCityRegions, (availableCityRegion) => availableCityRegion.id == cityRegion.id)) {
         return () => {
             Api
@@ -30,7 +30,7 @@ export function useCreateCityRegionMeeplePlay(cityRegion: CityRegion) {
 }
 
 export function useCreateRoadSegmentMeeplePlay(roadSegment: RoadSegment) {
-    const { availableRoadSegments } = useContext(AvailableActionsContext)
+    const { availableRoadSegments } = useContext(CurrentPlayerContext)
     if (_.some(availableRoadSegments, (availableRoadSegment) => availableRoadSegment.id == roadSegment.id)) {
         return () => {
             Api

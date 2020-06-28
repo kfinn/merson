@@ -9,13 +9,15 @@ import EndTurnButton from './EndTurnButton';
 import { PlayedTile } from './PlayedTileSvg';
 import StartGameButton from './StartGameButton';
 import { FieldRegion, Tile, CityRegion, RoadSegment } from './TileSvg';
+import PlayerList from './PlayerList';
+import { Player } from './Player';
 
-export const AvailableActionsContext = React.createContext({
+export const CurrentPlayerContext = React.createContext({
     availableNextTilePositions: [],
     availableFieldRegions: [],
     availableCityRegions: [],
     availableRoadSegments: []
-} as AvailableActions)
+} as CurrentPlayer)
 
 export interface CurrentPlayer extends Player, AvailableActions {
     status: {
@@ -31,11 +33,6 @@ export interface AvailableActions {
     availableCityRegions: CityRegion[]
     availableRoadSegments: RoadSegment[]
     canEndTurn: boolean
-}
-
-interface Player {
-    id: number
-    name: number
 }
 
 export interface Game {
@@ -84,7 +81,7 @@ export default function Game(props: { currentPlayer: CurrentPlayer }) {
         return () => { subscription.disconnect() }
     }, [game.id])
 
-    return <AvailableActionsContext.Provider value={currentPlayer}>
+    return <CurrentPlayerContext.Provider value={currentPlayer}>
         <div>
             <CurrentPlayerStatus currentPlayer={currentPlayer} />
             {
@@ -95,6 +92,7 @@ export default function Game(props: { currentPlayer: CurrentPlayer }) {
                 )
             }
             <BoardSvg game={game} />
+            <PlayerList game={game} />
         </div>
-    </AvailableActionsContext.Provider>
+    </CurrentPlayerContext.Provider>
 }
