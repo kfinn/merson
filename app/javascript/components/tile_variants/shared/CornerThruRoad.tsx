@@ -20,13 +20,13 @@ export function cornerTransformForCornerThruRoad(corner: Corner) {
 export function cornerMeeplePositionForCornerThruRoad(corner: Corner) {
     switch(corner) {
         case Corner.NORTH_EAST:
-            return { x: 25, y: -25 }
+            return { x: 11, y: -11 }
         case Corner.SOUTH_EAST:
-            return { x: 25, y: 25 }
+            return { x: 11, y: 11 }
         case Corner.SOUTH_WEST:
-            return { x: -25, y: 25 }
+            return { x: -11, y: 11 }
         case Corner.NORTH_WEST:
-            return { x: -25, y: -25 }
+            return { x: -11, y: -11 }
     }
 }
 

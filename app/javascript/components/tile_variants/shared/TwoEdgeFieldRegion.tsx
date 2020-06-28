@@ -22,7 +22,7 @@ export default function TwoEdgeFieldRegion({ corner, fieldRegion }: { corner: Co
             onClick={onClick}
         />
         {
-            fieldRegion.id && (
+            fieldRegion.meeplePlay && (
                 <Meeple
                     meeplePlay={fieldRegion.meeplePlay}
                     position={MEEPLE_POSITIONS_BY_CORNER[corner]}
