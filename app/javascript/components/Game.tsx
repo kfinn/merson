@@ -1,6 +1,6 @@
 import { createConsumer } from '@rails/actioncable';
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Api from '../models/Api';
 import { Point } from '../models/Point';
 import BoardSvg from './BoardSvg';
@@ -58,12 +58,13 @@ export default function Game(props: { currentPlayer: CurrentPlayer }) {
     const [currentPlayer, setCurrentPlayer] = useState(props.currentPlayer)
     const { game } = currentPlayer
 
-    const refresh = async () => {
-        const response = await Api.get(`/games/${game.id}/current_player`)
-        setCurrentPlayer(response.data as CurrentPlayer)
-    }
-
-    const debouncedRefresh = _.debounce(refresh)
+    const debouncedRefresh = useCallback(
+        _.debounce(async () => {
+            const response = await Api.get(`/games/${game.id}/current_player`)
+            setCurrentPlayer(response.data as CurrentPlayer)
+        }, 500),
+        []
+    )
 
     useEffect(() => {
         const subscription = consumer.subscriptions.create(
