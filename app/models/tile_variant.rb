@@ -6,11 +6,14 @@ class TileVariant < ActiveHash::Base
             id: 'northern_city',
             count: 5,
             build_edges_proc: lambda do |edges|
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 edges << CityEdge.new(
-                    orientation: Orientation::NORTH
+                    orientation: Orientation::NORTH,
+                    city_region: city_region
                 )
 
-                field_region = FieldRegion.new
+                field_region = FieldRegion.new city_region_borders: [city_region_border]
                 [Orientation::EAST, Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
@@ -22,7 +25,10 @@ class TileVariant < ActiveHash::Base
             id: 'single_east_west_city',
             count: 1,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new
+                north_city_region_border = CityRegionBorder.new
+                south_city_region_border = CityRegionBorder.new
+
+                city_region = CityRegion.new city_region_borders: [north_city_region_border, south_city_region_border]
                 [Orientation::EAST, Orientation::WEST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -30,17 +36,24 @@ class TileVariant < ActiveHash::Base
                     )
                 end
 
-                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
-                    edges << FieldEdge.new(
-                        orientation: orientation
-                    )
-                end
+                north_field_region = FieldRegion.new city_region_borders: [north_city_region_border]
+                edges << FieldEdge.new(
+                    orientation: Orientation::NORTH,
+                    field_region: north_field_region
+                )
+
+                south_field_region = FieldRegion.new city_region_borders: [south_city_region_border]
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH,
+                    field_region: south_field_region
+                )
             end
         }, {
             id: 'single_north_east_city',
             count: 3,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 [Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -48,7 +61,7 @@ class TileVariant < ActiveHash::Base
                     )
                 end
 
-                field_region = FieldRegion.new
+                field_region = FieldRegion.new city_region_borders: [city_region_border]
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
@@ -60,13 +73,21 @@ class TileVariant < ActiveHash::Base
             id: 'two_north_south_cities',
             count: 3,
             build_edges_proc: lambda do |edges|
-                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
-                    edges << CityEdge.new(
-                        orientation: orientation
-                    )
-                end
+                north_city_region_border = CityRegionBorder.new
+                north_city_region = CityRegion.new city_region_borders: [north_city_region_border]
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH,
+                    city_region: north_city_region
+                )
 
-                field_region = FieldRegion.new
+                south_city_region_border = CityRegionBorder.new
+                south_city_region = CityRegion.new city_region_borders: [south_city_region_border]
+                edges << CityEdge.new(
+                    orientation: Orientation::SOUTH,
+                    city_region: south_city_region
+                )
+
+                field_region = FieldRegion.new city_region_borders: [north_city_region_border, south_city_region_border]
                 [Orientation::EAST, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
@@ -78,13 +99,21 @@ class TileVariant < ActiveHash::Base
             id: 'two_north_east_cities',
             count: 2,
             build_edges_proc: lambda do |edges|
-                [Orientation::NORTH, Orientation::EAST].each do |orientation|
-                    edges << CityEdge.new(
-                        orientation: orientation
-                    )
-                end
+                north_city_region_border = CityRegionBorder.new
+                north_city_region = CityRegion.new city_region_borders: [north_city_region_border]
+                edges << CityEdge.new(
+                    orientation: Orientation::NORTH,
+                    city_region: north_city_region
+                )
 
-                field_region = FieldRegion.new
+                east_city_region_border = CityRegionBorder.new
+                east_city_region = CityRegion.new city_region_borders: [east_city_region_border]
+                edges << CityEdge.new(
+                    orientation: Orientation::EAST,
+                    city_region: east_city_region
+                )
+
+                field_region = FieldRegion.new city_region_borders: [north_city_region_border, east_city_region_border]
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
@@ -96,7 +125,10 @@ class TileVariant < ActiveHash::Base
             id: 'single_east_west_city_with_shield',
             count: 2,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new(shield: true)
+                north_city_region_border = CityRegionBorder.new
+                south_city_region_border = CityRegionBorder.new
+
+                city_region = CityRegion.new city_region_borders: [north_city_region_border, south_city_region_border], shield: true
                 [Orientation::EAST, Orientation::WEST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -104,17 +136,24 @@ class TileVariant < ActiveHash::Base
                     )
                 end
 
-                [Orientation::NORTH, Orientation::SOUTH].each do |orientation|
-                    edges << FieldEdge.new(
-                        orientation: orientation
-                    )
-                end
+                north_field_region = FieldRegion.new city_region_borders: [north_city_region_border]
+                edges << FieldEdge.new(
+                    orientation: Orientation::NORTH,
+                    field_region: north_field_region
+                )
+
+                south_field_region = FieldRegion.new city_region_borders: [south_city_region_border]
+                edges << FieldEdge.new(
+                    orientation: Orientation::SOUTH,
+                    field_region: south_field_region
+                )
             end
         }, {
             id: 'single_north_east_city_with_shield',
             count: 2,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new(shield: true)
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border], shield: true
                 [Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -122,7 +161,7 @@ class TileVariant < ActiveHash::Base
                     )
                 end
 
-                field_region = FieldRegion.new
+                field_region = FieldRegion.new city_region_borders: [city_region_border]
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
@@ -134,7 +173,8 @@ class TileVariant < ActiveHash::Base
             id: 'single_west_north_east_city',
             count: 3,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -143,14 +183,16 @@ class TileVariant < ActiveHash::Base
                 end
 
                 edges << FieldEdge.new(
-                    orientation: Orientation::SOUTH
+                    orientation: Orientation::SOUTH,
+                    field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
             id: 'single_west_north_east_city_with_shield',
             count: 1,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new(shield: true)
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border], shield: true
                 [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
                         orientation: orientation,
@@ -159,7 +201,8 @@ class TileVariant < ActiveHash::Base
                 end
 
                 edges << FieldEdge.new(
-                    orientation: Orientation::SOUTH
+                    orientation: Orientation::SOUTH,
+                    field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
@@ -242,11 +285,14 @@ class TileVariant < ActiveHash::Base
             id: 'northern_city_with_straight_road',
             count: 3,
             build_edges_proc: lambda do |edges|
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 edges << CityEdge.new(
-                    orientation: Orientation::NORTH
+                    orientation: Orientation::NORTH,
+                    city_region: city_region
                 )
 
-                north_field_region = FieldRegion.new
+                north_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 south_field_region = FieldRegion.new
                 road_segment = RoadSegment.new
 
@@ -273,11 +319,14 @@ class TileVariant < ActiveHash::Base
             id: 'northern_city_with_southwest_corner_road',
             count: 3,
             build_edges_proc: lambda do |edges|
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 edges << CityEdge.new(
-                    orientation: Orientation::NORTH
+                    orientation: Orientation::NORTH,
+                    city_region: city_region
                 )
 
-                northeast_field_region = FieldRegion.new
+                northeast_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 southwest_field_region = FieldRegion.new
                 road_segment = RoadSegment.new
 
@@ -304,11 +353,14 @@ class TileVariant < ActiveHash::Base
             id: 'northern_city_with_southeast_corner_road',
             count: 3,
             build_edges_proc: lambda do |edges|
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
                 edges << CityEdge.new(
-                    orientation: Orientation::NORTH
+                    orientation: Orientation::NORTH,
+                    city_region: city_region
                 )
 
-                northwest_field_region = FieldRegion.new
+                northwest_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 southeast_field_region = FieldRegion.new
                 road_segment = RoadSegment.new
 
@@ -335,7 +387,8 @@ class TileVariant < ActiveHash::Base
             id: 'single_west_north_east_city_with_road',
             count: 1,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
 
                 [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
@@ -345,14 +398,17 @@ class TileVariant < ActiveHash::Base
                 end
 
                 edges << RoadEdge.new(
-                    orientation: Orientation::SOUTH
+                    orientation: Orientation::SOUTH,
+                    left_field_region: FieldRegion.new(city_region_borders: [city_region_border]),
+                    right_field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
             id: 'single_west_north_east_city_with_shield_and_road',
             count: 2,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new(shield: true)
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border], shield: true
 
                 [Orientation::WEST, Orientation::NORTH, Orientation::EAST].each do |orientation|
                     edges << CityEdge.new(
@@ -362,15 +418,18 @@ class TileVariant < ActiveHash::Base
                 end
 
                 edges << RoadEdge.new(
-                    orientation: Orientation::SOUTH
+                    orientation: Orientation::SOUTH,
+                    left_field_region: FieldRegion.new(city_region_borders: [city_region_border]),
+                    right_field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
             id: 'single_north_east_city_with_corner_road',
             count: 3,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new
-                northeast_field_region = FieldRegion.new
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border]
+                northeast_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 southwest_field_region = FieldRegion.new
                 road_segment = RoadSegment.new
 
@@ -399,8 +458,9 @@ class TileVariant < ActiveHash::Base
             id: 'single_north_east_city_with_shield_and_corner_road',
             count: 2,
             build_edges_proc: lambda do |edges|
-                city_region = CityRegion.new(shield: true)
-                northeast_field_region = FieldRegion.new
+                city_region_border = CityRegionBorder.new
+                city_region = CityRegion.new city_region_borders: [city_region_border], shield: true
+                northeast_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 southwest_field_region = FieldRegion.new
                 road_segment = RoadSegment.new
 
@@ -460,12 +520,14 @@ class TileVariant < ActiveHash::Base
             id: 'city_with_three_roads',
             count: 3,
             build_edges_proc: lambda do |edges|
-                north_field_region = FieldRegion.new
+                city_region_border = CityRegionBorder.new
+                north_field_region = FieldRegion.new city_region_borders: [city_region_border]
                 southeast_field_region = FieldRegion.new
                 southwest_field_region = FieldRegion.new
 
                 edges << CityEdge.new(
-                    orientation: Orientation::NORTH
+                    orientation: Orientation::NORTH,
+                    city_region: CityRegion.new(city_region_borders: [city_region_border])
                 )
 
                 edges << RoadEdge.new(

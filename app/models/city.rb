@@ -7,7 +7,7 @@ class City < ApplicationRecord
         where.not id: CityRegion.incomplete.select(:city_id)
     end
 
-    def self.with_meeple_plays(meeple_plays)
+    def self.with_meeple_plays(meeple_plays = MeeplePlay.all)
         where(id: CityRegion.with_meeple_plays(meeple_plays).select(:city_id))
     end
 
@@ -15,7 +15,7 @@ class City < ApplicationRecord
         city_regions.any?(&:has_meeple_play?)
     end
 
-    def score!
+    def score!(scale: 1)
         transaction do
             meeple_counts_by_player = meeple_plays.counts_by_player
             max_meeple_plays_count = meeple_counts_by_player.max_by(&:meeple_plays_count).meeple_plays_count
@@ -23,7 +23,7 @@ class City < ApplicationRecord
             player_ids_with_max_count = meeple_counts_with_max_count.map(&:player_id)
 
             Player.where(id: player_ids_with_max_count).each do |player|
-                player.earn_points! point_value
+                player.earn_points! (point_value * scale)
             end
 
             meeple_plays.each(&:destroy!)

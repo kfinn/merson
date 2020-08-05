@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_28_232533) do
+ActiveRecord::Schema.define(version: 2020_08_05_040456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,15 @@ ActiveRecord::Schema.define(version: 2020_06_28_232533) do
   create_table "cities", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "city_region_borders", force: :cascade do |t|
+    t.bigint "city_region_id", null: false
+    t.bigint "field_region_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["city_region_id"], name: "index_city_region_borders_on_city_region_id"
+    t.index ["field_region_id"], name: "index_city_region_borders_on_field_region_id"
   end
 
   create_table "city_regions", force: :cascade do |t|
@@ -184,6 +193,8 @@ ActiveRecord::Schema.define(version: 2020_06_28_232533) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "city_region_borders", "city_regions"
+  add_foreign_key "city_region_borders", "field_regions"
   add_foreign_key "city_regions", "cities"
   add_foreign_key "edge_field_regions", "edges"
   add_foreign_key "edge_field_regions", "field_regions"

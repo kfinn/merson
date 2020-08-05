@@ -18,7 +18,7 @@ class Game < ApplicationRecord
 
     before_validation :generate!, on: :create
 
-    after_save :changed!
+    after_commit :changed!
 
     def started?
         started_at.present?
@@ -37,10 +37,19 @@ class Game < ApplicationRecord
             TurnEndScoring.new(self).apply!
 
             turn.end!
-            next_turn = turn.build_next_turn
-            next_turn.save!
-            update! turn: next_turn
+
+            if tiles.unplayed.playable.any?
+                next_turn = turn.build_next_turn
+                next_turn.save!
+                update! turn: next_turn
+            else
+                end_game!
+            end
         end
+    end
+
+    def end_game!
+        GameEndScoring.new(self).apply!
     end
 
     private
@@ -55,7 +64,7 @@ class Game < ApplicationRecord
             y: 0
         )
 
-        TileVariant.for_deck.shuffle.map.with_index do |tile_variant, index|
+        TileVariant.for_deck.shuffle.first(5).map.with_index do |tile_variant, index|
             tiles.build(
                 tile_variant: tile_variant,
                 ordering: index

@@ -2,6 +2,10 @@ import React from "react";
 import { TileFeature, TileFeatureType } from "../../TileSvg";
 
 export default function DebugTileFeatureId({ position: { x, y }, tileFeature }: { position: { x: number, y: number }, tileFeature: TileFeature }) {
+    if (true) {
+        return null;
+    }
+
     const text = (tileFeature) => {
         switch(tileFeature.type) {
             case TileFeatureType.CITY_REGION:

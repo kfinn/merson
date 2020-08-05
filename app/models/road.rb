@@ -7,7 +7,7 @@ class Road < ApplicationRecord
         where.not id: RoadSegment.incomplete.select(:road_id)
     end
 
-    def self.with_meeple_plays(meeple_plays)
+    def self.with_meeple_plays(meeple_plays = MeeplePlay.all)
         where(id: RoadSegment.with_meeple_plays(meeple_plays).select(:road_id))
     end
 

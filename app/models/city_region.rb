@@ -8,6 +8,8 @@ class CityRegion < ApplicationRecord
 
     has_one :meeple_play, as: :tile_feature
 
+    has_many :city_region_borders
+
     before_validation :generate_city, on: :create
 
     def self.with_unoccupied_city

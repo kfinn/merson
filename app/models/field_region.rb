@@ -10,6 +10,9 @@ class FieldRegion < ApplicationRecord
 
     has_one :meeple_play, as: :tile_feature
 
+    has_many :city_region_borders
+    has_many :cities, through: :city_region_borders
+
     before_validation :generate_field, on: :create
 
     def self.with_unoccupied_field
@@ -25,6 +28,10 @@ class FieldRegion < ApplicationRecord
                 )
             )
         SQL
+    end
+
+    def self.with_meeple_plays(meeple_plays)
+        where id: meeple_plays.where(tile_feature_type: name).select(:tile_feature_id)
     end
 
     def has_meeple_play?
