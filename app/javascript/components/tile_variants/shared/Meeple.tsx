@@ -1,7 +1,6 @@
-import { MeeplePlay } from "../../TileSvg";
 import React from "react";
 import { Point } from "../../../models/Point";
-import { Orientation, OrientationId } from "../../../models/Orientation";
+import { MeeplePlay } from "../../TileSvg";
 
 interface Props {
     position: Point
