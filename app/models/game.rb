@@ -64,7 +64,7 @@ class Game < ApplicationRecord
             y: 0
         )
 
-        TileVariant.for_deck.shuffle.first(5).map.with_index do |tile_variant, index|
+        TileVariant.for_deck.shuffle.map.with_index do |tile_variant, index|
             tiles.build(
                 tile_variant: tile_variant,
                 ordering: index
