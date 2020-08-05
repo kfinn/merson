@@ -1,5 +1,6 @@
 class EdgePair < ApplicationRecord
     has_many :edge_pair_members
+    has_many :edges, through: :edge_pair_members
 
     has_one :older_edge_pair_member, -> { older }, class_name: 'EdgePairMember'
     has_one :older_edge, through: :older_edge_pair_member, source: :edge

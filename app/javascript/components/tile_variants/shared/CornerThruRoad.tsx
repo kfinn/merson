@@ -3,6 +3,7 @@ import { Corner } from "../../../models/Corner";
 import { useCreateRoadSegmentMeeplePlay, roadSegmentClassNames } from "./tileFeatureActions";
 import { RoadSegment } from "../../TileSvg";
 import Meeple from "./Meeple";
+import DebugTileFeatureId from "./DebugTileFeatureId";
 
 export function cornerTransformForCornerThruRoad(corner: Corner) {
     switch(corner) {
@@ -30,7 +31,7 @@ export function cornerMeeplePositionForCornerThruRoad(corner: Corner) {
     }
 }
 
-export default function CornerThruRoad({ corner, roadSegment }: { corner: Corner, roadSegment?: RoadSegment }) {
+export default function CornerThruRoad({ corner, roadSegment }: { corner: Corner, roadSegment: RoadSegment }) {
     const onClick = useCreateRoadSegmentMeeplePlay(roadSegment)
 
     return <g>
@@ -40,6 +41,7 @@ export default function CornerThruRoad({ corner, roadSegment }: { corner: Corner
             transform={cornerTransformForCornerThruRoad(corner)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={cornerMeeplePositionForCornerThruRoad(corner)} tileFeature={roadSegment} />
         {
             roadSegment.meeplePlay && (
                 <Meeple

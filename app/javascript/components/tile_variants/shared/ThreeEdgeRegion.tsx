@@ -3,6 +3,7 @@ import { Orientation, orientationTransform, OrientationId } from '../../../model
 import { TileFeature } from '../../TileSvg';
 import { tileFeatureClassNames, useCreateTileFeatureMeeplePlay } from './tileFeatureActions';
 import Meeple from './Meeple';
+import DebugTileFeatureId from './DebugTileFeatureId';
 
 const MEEPLE_POSITIONS_BY_ORIENTATION_ID = {
     [OrientationId.NORTH]: { x: 0, y: 18 },
@@ -20,6 +21,7 @@ export default function ThreeEdgeRegion({ tileFeature, orientation }: { tileFeat
             transform={orientationTransform(orientation)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={MEEPLE_POSITIONS_BY_ORIENTATION_ID[orientation.id]} tileFeature={tileFeature} />
         {
             tileFeature.meeplePlay && (
                 <Meeple

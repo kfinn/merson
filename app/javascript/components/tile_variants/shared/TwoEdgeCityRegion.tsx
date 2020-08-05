@@ -3,6 +3,7 @@ import { Corner } from '../../../models/Corner';
 import { cityClassNames, useCreateCityRegionMeeplePlay } from './tileFeatureActions';
 import { CityRegion } from '../../TileSvg';
 import Meeple from './Meeple';
+import DebugTileFeatureId from './DebugTileFeatureId';
 
 export function cornerTransform(corner: Corner) {
     switch (corner) {
@@ -33,6 +34,7 @@ export default function TwoEdgeCityRegion({ corner, cityRegion }: { corner: Corn
             transform={cornerTransform(corner)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={MEEPLE_POSITIONS_BY_CORNER[corner]} tileFeature={cityRegion} />
         {
             cityRegion.meeplePlay && (
                 <Meeple

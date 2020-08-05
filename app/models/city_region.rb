@@ -25,6 +25,22 @@ class CityRegion < ApplicationRecord
         SQL
     end
 
+    def self.with_completed_city
+        where city_id: City.completed
+    end
+
+    def self.incomplete
+        where id: Edge.unoccupied.select(:city_region_id)
+    end
+
+    def self.with_meeple_plays(meeple_plays)
+        where id: meeple_plays.where(tile_feature_type: name).select(:tile_feature_id)
+    end
+
+    def self.total_point_value
+        sum('CASE WHEN shield THEN 4 ELSE 2 END')
+    end
+
     def board_feature
         city
     end

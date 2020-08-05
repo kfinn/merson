@@ -16,6 +16,9 @@ class Edge < ApplicationRecord
     has_one :right_edge_field_region, -> { right_of_road }, class_name: 'EdgeFieldRegion', foreign_key: :edge_id
     has_one :right_field_region, through: :right_edge_field_region, source: :field_region
 
+    has_one :edge_pair_member
+    has_one :edge_pair, through: :edge_pair_member
+
     scope :played, -> { where tile: Tile.played }
 
     def self.unoccupied

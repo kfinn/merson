@@ -2,6 +2,7 @@ import React from 'react';
 import { actionableClassNames, useCreateTileFeatureMeeplePlay, tileFeatureClassNames } from './tileFeatureActions';
 import { TileFeature } from '../../TileSvg';
 import Meeple from './Meeple';
+import DebugTileFeatureId from './DebugTileFeatureId';
 
 export enum Axis {
     HORIZONTAL, VERTICAL
@@ -25,6 +26,7 @@ export default function TwoEdgeCrossTileRegion({ tileFeature, axis }: { tileFeat
             transform={axisTransform(axis)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={{ x: 0, y: 0}} tileFeature={tileFeature} />
         {
             tileFeature.meeplePlay && (
                 <Meeple

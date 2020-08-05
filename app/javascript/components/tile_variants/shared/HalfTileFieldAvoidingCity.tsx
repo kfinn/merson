@@ -3,6 +3,7 @@ import { Orientation, orientationTransform, OrientationId } from '../../../model
 import { FieldRegion } from '../../TileSvg';
 import { fieldClassNames, useCreateFieldRegionMeeplePlay } from './tileFeatureActions';
 import Meeple from './Meeple';
+import DebugTileFeatureId from './DebugTileFeatureId';
 
 export default function HalfTileFieldAvoidingCity({ orientation, fieldRegion }: { orientation: Orientation, fieldRegion: FieldRegion }) {
     const onClick = useCreateFieldRegionMeeplePlay(fieldRegion)
@@ -14,6 +15,7 @@ export default function HalfTileFieldAvoidingCity({ orientation, fieldRegion }: 
             transform={orientationTransform(orientation)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={{ x: -32, y: orientation.id == OrientationId.NORTH ? -32 : 32 }} tileFeature={fieldRegion} />
         {
             fieldRegion.meeplePlay && (
                 <Meeple

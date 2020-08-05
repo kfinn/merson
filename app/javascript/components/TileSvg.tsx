@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edge, RoadEdge } from '../models/Edge';
+import { Edge } from '../models/Edge';
 import { Orientation } from '../models/Orientation';
 import CityWithThreeRoadsSvg from './tile_variants/CityWithThreeRoadsSvg';
 import CornerRoadSvg from './tile_variants/CornerRoadSvg';
@@ -68,16 +68,19 @@ enum TileVariantId {
 export interface FieldRegion extends TileFeature {
     id: number
     type: TileFeatureType.FIELD_REGION
+    field: { id: number }
 }
 
 export interface CityRegion extends TileFeature {
     id: number
     type: TileFeatureType.CITY_REGION
+    city: { id: number }
 }
 
 export interface RoadSegment extends TileFeature {
     id: number
     type: TileFeatureType.ROAD_SEGMENT
+    road: { id: number }
 }
 
 export interface TileFeature {

@@ -1,4 +1,4 @@
-json.(current_player, :id, :name)
+json.partial! current_player
 
 json.status do
     json.actor(

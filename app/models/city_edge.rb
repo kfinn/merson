@@ -5,7 +5,7 @@ class CityEdge < Edge
     before_validation :generate_city_region, on: :create
 
     def merge_edge_features!(newer_edge)
-        newer_edge.city_region.update! city: city
+        newer_edge.city.merge! city
     end
 
     private

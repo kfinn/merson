@@ -43,4 +43,8 @@ class Player < ApplicationRecord
     def has_meeple?
         meeple_plays.size < MEEPLES_PER_PLAYER
     end
+
+    def earn_points!(points)
+        update! score: score + points
+    end
 end

@@ -10,6 +10,9 @@ class Game < ApplicationRecord
     has_many :field_regions, through: :tiles
     has_many :road_segments, through: :tiles
 
+    has_many :road_segment_meeple_plays, through: :road_segments, source: :meeple_play
+    has_many :city_region_meeple_plays, through: :city_regions, source: :meeple_play
+
     belongs_to :turn, optional: true
     has_many :turns, through: :players
 
@@ -31,6 +34,8 @@ class Game < ApplicationRecord
 
     def end_turn!
         transaction do
+            TurnEndScoring.new(self).apply!
+
             turn.end!
             next_turn = turn.build_next_turn
             next_turn.save!

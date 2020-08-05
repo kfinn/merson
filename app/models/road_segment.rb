@@ -27,6 +27,18 @@ class RoadSegment < ApplicationRecord
         SQL
     end
 
+    def self.with_completed_road
+        where road_id: Road.completed
+    end
+
+    def self.incomplete
+        where id: Edge.unoccupied.select(:road_segment_id)
+    end
+
+    def self.with_meeple_plays(meeple_plays)
+        where id: meeple_plays.where(tile_feature_type: name).select(:tile_feature_id)
+    end
+
     def has_meeple_play?
         meeple_play.present?
     end

@@ -4,6 +4,7 @@ import { cornerTransform } from './TwoEdgeCityRegion';
 import { fieldClassNames, useCreateFieldRegionMeeplePlay } from './tileFeatureActions';
 import { FieldRegion } from '../../TileSvg';
 import Meeple from './Meeple';
+import DebugTileFeatureId from './DebugTileFeatureId';
 
 const MEEPLE_POSITIONS_BY_CORNER = {
     [Corner.NORTH_WEST]: { x: -21, y: -21 },
@@ -21,6 +22,7 @@ export default function TwoEdgeFieldRegion({ corner, fieldRegion }: { corner: Co
             transform={cornerTransform(corner)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={MEEPLE_POSITIONS_BY_CORNER[corner]} tileFeature={fieldRegion} />
         {
             fieldRegion.meeplePlay && (
                 <Meeple

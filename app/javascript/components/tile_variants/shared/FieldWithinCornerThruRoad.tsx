@@ -5,6 +5,7 @@ import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./tileFeatureAc
 import { FieldRegion } from "../../TileSvg";
 import Meeple from "./Meeple";
 import { MEEPLE_POSITIONS_BY_CORNER } from "./FieldWithinAdjacentTerminalRoads";
+import DebugTileFeatureId from "./DebugTileFeatureId";
 
 export default function FieldWithinCornerThruRoad({ corner, fieldRegion }: { corner: Corner, fieldRegion: FieldRegion }) {
     const onClick = useCreateFieldRegionMeeplePlay(fieldRegion)
@@ -16,6 +17,7 @@ export default function FieldWithinCornerThruRoad({ corner, fieldRegion }: { cor
             transform={cornerTransformForCornerThruRoad(corner)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={MEEPLE_POSITIONS_BY_CORNER[corner]} tileFeature={fieldRegion} />
         {
             fieldRegion.meeplePlay && (
                 <Meeple

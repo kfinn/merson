@@ -10,6 +10,12 @@ class MeeplePlay < ApplicationRecord
 
     before_validation :pick_meeple_index
 
+    delegate :board_feature, to: :tile_feature
+
+    def self.counts_by_player
+        group(:player_id).select(:player_id, 'COUNT(*) as meeple_plays_count')
+    end
+
     def pick_meeple_index
         self.meeple_index = ((0..(Player::MEEPLES_PER_PLAYER - 1)).to_a - player.meeple_plays.map(&:meeple_index)).first
     end

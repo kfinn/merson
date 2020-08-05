@@ -3,6 +3,7 @@ import { Orientation, orientationTransform, OrientationId } from "../../../model
 import { RoadSegment } from "../../TileSvg";
 import { useCreateRoadSegmentMeeplePlay, roadSegmentClassNames } from "./tileFeatureActions";
 import Meeple from "./Meeple";
+import DebugTileFeatureId from "./DebugTileFeatureId";
 
 const MEEPLE_POSITIONS_BY_ORIENTATION_ID = {
     [OrientationId.NORTH]: { x: 0, y: -36 },
@@ -11,7 +12,7 @@ const MEEPLE_POSITIONS_BY_ORIENTATION_ID = {
     [OrientationId.WEST]: { x: -36, y: 0 }
 }
 
-export default function TerminalRoad({ orientation, roadSegment }: { orientation: Orientation, roadSegment?: RoadSegment }) {
+export default function TerminalRoad({ orientation, roadSegment }: { orientation: Orientation, roadSegment: RoadSegment }) {
     const onClick = useCreateRoadSegmentMeeplePlay(roadSegment)
     return <g>
         <path
@@ -20,6 +21,7 @@ export default function TerminalRoad({ orientation, roadSegment }: { orientation
             transform={orientationTransform(orientation)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={MEEPLE_POSITIONS_BY_ORIENTATION_ID[orientation.id]} tileFeature={roadSegment} />
         {
             roadSegment.meeplePlay && (
                 <Meeple

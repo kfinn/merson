@@ -7,9 +7,9 @@ class RoadEdge < Edge
     before_validation :generate_features, on: :create
 
     def merge_edge_features!(newer_edge)
-        newer_edge.road_segment.update! road: road
-        newer_edge.left_field_region.update! field: right_field
-        newer_edge.right_field_region.update! field: left_field
+        newer_edge.road.merge! road
+        newer_edge.left_field.merge! right_field
+        newer_edge.right_field.merge! left_field
     end
 
     private

@@ -13,9 +13,5 @@ if game.turn && !game.turn.tile.played?
 end
 
 json.players game.players do |player|
-    json.(
-        player,
-        :id,
-        :name
-    )
+    json.partial! player
 end

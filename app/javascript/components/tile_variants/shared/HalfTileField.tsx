@@ -3,6 +3,7 @@ import React from "react";
 import { fieldClassNames, useCreateFieldRegionMeeplePlay } from "./tileFeatureActions";
 import { FieldRegion } from "../../TileSvg";
 import Meeple from "./Meeple";
+import DebugTileFeatureId from "./DebugTileFeatureId";
 
 export default function HalfTileField({ orientation, fieldRegion }: { orientation: Orientation, fieldRegion: FieldRegion }) {
     const onClick = useCreateFieldRegionMeeplePlay(fieldRegion)
@@ -17,6 +18,7 @@ export default function HalfTileField({ orientation, fieldRegion }: { orientatio
             className={fieldClassNames(onClick)}
             onClick={onClick}
         />
+        <DebugTileFeatureId position={{ x: 0, y: orientation.id == OrientationId.NORTH ? -32 : 32 }} tileFeature={fieldRegion} />
         {
             fieldRegion.meeplePlay && (
                 <Meeple
