@@ -15,8 +15,8 @@ class GameStart
                 player.update! ordering: index
             end
 
-            turn = ordered_players.first.turns.create!
-
+            tile_draw = TileDraw.new(game)
+            turn = ordered_players.first.turns.create! tile: tile_draw.tile
             game.update!(
                 started_at: Time.zone.now,
                 turn: turn

@@ -7,16 +7,10 @@ class Turn < ApplicationRecord
 
     validate :must_play_tile_before_meeple
 
-    before_validation :pick_next_tile, on: :create
-
     delegate :has_meeple?, to: :player, prefix: true
 
     def current?
         game.turn == self
-    end
-
-    def pick_next_tile
-        self.tile = game.tiles.playable.upcoming.first
     end
 
     def can_play_next_tile?
@@ -42,23 +36,16 @@ class Turn < ApplicationRecord
         ended? || (tile_played? && available_tile_features.empty?)
     end
 
-    def build_next_turn
-        Turn.new(player: player.next_player)
-    end
-
-    def available_next_tile_positions
-        unless instance_variable_defined?(:@available_next_tile_positions)
-            if !can_play_next_tile?
-                @available_next_tile_positions = []
-            else
-                @available_next_tile_positions = game.unoccupied_played_tile_edges.includes(:tile).map(&:facing_position).uniq
-            end
-        end
-        @available_next_tile_positions
+    def build_next_turn(**params)
+        Turn.new({ player: player.next_player }.merge(params))
     end
 
     def available_tile_features
         @available_tile_features ||= available_city_regions + available_field_regions + available_road_segments
+    end
+
+    def available_next_tile_positions
+        @available_next_tile_positions ||= can_play_next_tile? ? game.available_next_tile_positions : []
     end
 
     def available_field_regions

@@ -33,7 +33,6 @@ class Edge < ApplicationRecord
         scope orientation.edge_scope_name, -> { where orientation_id: orientation.id }
     end
 
-    Position = Struct.new(:x, :y)
     def facing_position
         Position.new(tile.x + absolute_orientation.dx, tile.y + absolute_orientation.dy)
     end

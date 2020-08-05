@@ -33,7 +33,10 @@ class Tile < ApplicationRecord
     scope :played, -> { where.not(x: nil).where.not(y: nil) }
     scope :unplayed, -> { where(x: nil, y: nil) }
     scope :upcoming, -> { unplayed.order(:ordering) }
-    scope :playable, -> { where(id: Edge.playable.select(:tile_id)) }
+
+    def self.with_unoccupied_edge
+        where id: Edge.unoccupied.select(:tile_id)
+    end
 
     def tile_variant=(tile_variant)
         self.tile_variant_id=tile_variant.id
@@ -50,6 +53,10 @@ class Tile < ApplicationRecord
 
     def played?
         x.present? && y.present?
+    end
+
+    def position
+        Position.new(x, y)
     end
 
     private

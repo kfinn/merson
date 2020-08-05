@@ -38,8 +38,9 @@ class Game < ApplicationRecord
 
             turn.end!
 
-            if tiles.unplayed.playable.any?
-                next_turn = turn.build_next_turn
+            tile_draw = TileDraw.new(self)
+            if tile_draw.tile.present?
+                next_turn = turn.build_next_turn tile: tile_draw.tile
                 next_turn.save!
                 update! turn: next_turn
             else
@@ -50,6 +51,10 @@ class Game < ApplicationRecord
 
     def end_game!
         GameEndScoring.new(self).apply!
+    end
+
+    def available_next_tile_positions
+        @available_next_tile_positions ||= unoccupied_played_tile_edges.includes(:tile).map(&:facing_position).uniq
     end
 
     private
