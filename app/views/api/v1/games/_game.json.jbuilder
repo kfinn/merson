@@ -27,6 +27,7 @@ end
 json.players(
     game
     .players
+    .ordered
     .select('*')
     .select_remaining_meeples
 ) do |player|
