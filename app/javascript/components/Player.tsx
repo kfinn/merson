@@ -6,6 +6,7 @@ export interface Player {
     id: number
     name: string
     score: number
+    remainingMeeples: number
 }
 
 export default function Player({ player }: { player: Player }) {
@@ -20,6 +21,9 @@ export default function Player({ player }: { player: Player }) {
         </h4>
         <div>
             {player.score} {pluralize('point', player.score)}
+        </div>
+        <div>
+            {player.remainingMeeples} {pluralize('meeple', player.remainingMeeples)} remaining
         </div>
     </div>
 }

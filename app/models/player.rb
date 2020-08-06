@@ -13,6 +13,17 @@ class Player < ApplicationRecord
 
     scope :ordered, -> { order :ordering }
 
+    def self.select_remaining_meeples
+        select(<<~SQL.squish)
+            (#{
+                MeeplePlay
+                    .where('player_id = players.id')
+                    .select("#{MEEPLES_PER_PLAYER} - count(*)")
+                    .to_sql
+            }) AS remaining_meeples
+        SQL
+    end
+
     delegate(
         :can_play_next_tile?,
         :can_play_meeple_on_tile_feature?,
@@ -46,5 +57,13 @@ class Player < ApplicationRecord
 
     def earn_points!(points)
         update! score: score + points
+    end
+
+    def remaining_meeples
+        @remaining_meeples ||= attributes.fetch('remaining_meeples') { calculate_remaining_meeples }
+    end
+
+    def calculate_remaining_meeples
+        MEEPLES_PER_PLAYER - meeple_plays.size
     end
 end

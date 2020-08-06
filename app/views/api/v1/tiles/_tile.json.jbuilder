@@ -8,8 +8,8 @@ json.orientation do
     json.(tile.orientation, :id)
 end
 
-Orientation.all.each do |orientation|
-    json.set! orientation.edge_relation_name do
-        json.partial! tile.edge_with_relative_orientation(orientation)
+tile.edges.each do |edge|
+    json.set! edge.orientation.edge_relation_name do
+        json.partial! edge
     end
 end

@@ -1,1 +1,1 @@
-json.(player, :id, :name, :score)
+json.(player, :id, :name, :score, :remaining_meeples)

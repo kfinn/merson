@@ -24,6 +24,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.2'
+  gem 'rack-mini-profiler', '~> 2.0', '>= 2.0.4'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'spring'
   gem 'web-console', '>= 3.3.0'

@@ -1,7 +1,7 @@
 json.(
     edge,
     :id,
-    :type,
+    :type
 )
 
 json.orientation do
