@@ -17,7 +17,7 @@ class TileVariant < ActiveHash::Base
                 [Orientation::EAST, Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
-                        field_region: field_region
+                        singular_field_region: field_region
                     )
                 end
             end
@@ -39,13 +39,13 @@ class TileVariant < ActiveHash::Base
                 north_field_region = FieldRegion.new city_region_borders: [north_city_region_border]
                 edges << FieldEdge.new(
                     orientation: Orientation::NORTH,
-                    field_region: north_field_region
+                    singular_field_region: north_field_region
                 )
 
                 south_field_region = FieldRegion.new city_region_borders: [south_city_region_border]
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: south_field_region
+                    singular_field_region: south_field_region
                 )
             end
         }, {
@@ -65,7 +65,7 @@ class TileVariant < ActiveHash::Base
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
-                        field_region: field_region
+                        singular_field_region: field_region
                     )
                 end
             end
@@ -91,7 +91,7 @@ class TileVariant < ActiveHash::Base
                 [Orientation::EAST, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
-                        field_region: field_region
+                        singular_field_region: field_region
                     )
                 end
             end
@@ -117,7 +117,7 @@ class TileVariant < ActiveHash::Base
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
-                        field_region: field_region
+                        singular_field_region: field_region
                     )
                 end
             end
@@ -139,13 +139,13 @@ class TileVariant < ActiveHash::Base
                 north_field_region = FieldRegion.new city_region_borders: [north_city_region_border]
                 edges << FieldEdge.new(
                     orientation: Orientation::NORTH,
-                    field_region: north_field_region
+                    singular_field_region: north_field_region
                 )
 
                 south_field_region = FieldRegion.new city_region_borders: [south_city_region_border]
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: south_field_region
+                    singular_field_region: south_field_region
                 )
             end
         }, {
@@ -165,7 +165,7 @@ class TileVariant < ActiveHash::Base
                 [Orientation::SOUTH, Orientation::WEST].each do |orientation|
                     edges << FieldEdge.new(
                         orientation: orientation,
-                        field_region: field_region
+                        singular_field_region: field_region
                     )
                 end
             end
@@ -184,7 +184,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: FieldRegion.new(city_region_borders: [city_region_border])
+                    singular_field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
@@ -202,7 +202,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: FieldRegion.new(city_region_borders: [city_region_border])
+                    singular_field_region: FieldRegion.new(city_region_borders: [city_region_border])
                 )
             end
         }, {
@@ -227,7 +227,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::NORTH,
-                    field_region: north_field_region
+                    singular_field_region: north_field_region
                 )
 
                 edges << RoadEdge.new(
@@ -239,7 +239,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: south_field_region
+                    singular_field_region: south_field_region
                 )
 
                 edges << RoadEdge.new(
@@ -259,12 +259,12 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::NORTH,
-                    field_region: northeast_field_region
+                    singular_field_region: northeast_field_region
                 )
 
                 edges << FieldEdge.new(
                     orientation: Orientation::EAST,
-                    field_region: northeast_field_region
+                    singular_field_region: northeast_field_region
                 )
 
                 edges << RoadEdge.new(
@@ -305,7 +305,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::SOUTH,
-                    field_region: south_field_region
+                    singular_field_region: south_field_region
                 )
 
                 edges << RoadEdge.new(
@@ -332,7 +332,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::EAST,
-                    field_region: northeast_field_region
+                    singular_field_region: northeast_field_region
                 )
 
                 edges << RoadEdge.new(
@@ -380,7 +380,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::WEST,
-                    field_region: northwest_field_region
+                    singular_field_region: northwest_field_region
                 )
             end
         }, {
@@ -495,7 +495,7 @@ class TileVariant < ActiveHash::Base
 
                 edges << FieldEdge.new(
                     orientation: Orientation::NORTH,
-                    field_region: north_field_region
+                    singular_field_region: north_field_region
                 )
 
                 edges << RoadEdge.new(

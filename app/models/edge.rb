@@ -7,6 +7,9 @@ class Edge < ApplicationRecord
 
     belongs_to :road_segment, optional: true
 
+    has_many :edge_field_regions
+    has_many :field_regions, through: :edge_field_regions
+
     has_one :left_edge_field_region, -> { left_of_road }, class_name: 'EdgeFieldRegion'
     has_one :left_field_region, through: :left_edge_field_region, source: :field_region
 
@@ -14,7 +17,7 @@ class Edge < ApplicationRecord
     has_one :right_field_region, through: :right_edge_field_region, source: :field_region
 
     has_one :singular_edge_field_region, -> { singular }, class_name: 'EdgeFieldRegion'
-    has_one :field_region, through: :singular_edge_field_region
+    has_one :singular_field_region, through: :singular_edge_field_region, source: :field_region
 
     has_one :edge_pair_member
     has_one :edge_pair, through: :edge_pair_member

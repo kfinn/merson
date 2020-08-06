@@ -6,7 +6,7 @@ json.played_tiles(
     .includes(
         edges: {
             city_region: [:meeple_play],
-            field_region: [:meeple_play],
+            singular_field_region: [:meeple_play],
             left_field_region: [:meeple_play],
             right_field_region: [:meeple_play],
             road_segment: [:meeple_play]
