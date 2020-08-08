@@ -34,7 +34,7 @@ export default function NorthernCityWithSouthwestCornerRoadSvg({ tile }: TileVar
                 outerFieldRegion.meeplePlay && (
                     <Meeple
                         meeplePlay={outerFieldRegion.meeplePlay}
-                        position={{ x: 15, y: 15 }}
+                        position={{ x: 20, y: 10 }}
                     />
                 )
             }

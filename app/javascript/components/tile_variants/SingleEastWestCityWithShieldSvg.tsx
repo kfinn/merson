@@ -6,6 +6,6 @@ import TileVariantProps from './TileVariantProps';
 export default function SingleEastWestCityWithShieldSvg({ tile }: TileVariantProps) {
     return <g>
         <SingleEastWestCity tile={tile} />
-        <Shield shieldPosition={ShieldPosition.MID_CENTER} />
+        <Shield shieldPosition={ShieldPosition.MID_EAST} />
     </g>
 }

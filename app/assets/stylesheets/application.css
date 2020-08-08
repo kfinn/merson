@@ -70,6 +70,49 @@
  }
 
  .meeple {
-     fill: white;
-     text-anchor: middle;
+     stroke: black;
  }
+
+.meeple.red {
+    fill: red;
+}
+
+.meeple.yellow {
+    fill: yellow;
+}
+
+.meeple.green {
+    fill: green;
+}
+
+.meeple.blue {
+    fill: blue;
+}
+
+.meeple.black {
+    fill: black;
+}
+
+.player-name.red {
+    background-color: red;
+    color: white;
+}
+
+.player-name.yellow {
+    background-color: yellow;
+}
+
+.player-name.green {
+    background-color: green;
+    color: white;
+}
+
+.player-name.blue {
+    background-color: blue;
+    color: white;
+}
+
+.player-name.black {
+    background-color: black;
+    color: white;
+}
