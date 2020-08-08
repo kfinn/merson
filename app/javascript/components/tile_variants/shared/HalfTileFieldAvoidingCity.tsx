@@ -20,7 +20,7 @@ export default function HalfTileFieldAvoidingCity({ orientation, fieldRegion }: 
             fieldRegion.meeplePlay && (
                 <Meeple
                     meeplePlay={fieldRegion.meeplePlay}
-                    position={{ x: -32, y: orientation.id == OrientationId.NORTH ? -32 : 32 }}
+                    position={{ x: -47, y: orientation.id == OrientationId.NORTH ? -37 : 37 }}
                 />
             )
         }
