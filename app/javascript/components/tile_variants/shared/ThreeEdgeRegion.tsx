@@ -6,10 +6,10 @@ import Meeple from './Meeple';
 import DebugTileFeatureId from './DebugTileFeatureId';
 
 const MEEPLE_POSITIONS_BY_ORIENTATION_ID = {
-    [OrientationId.NORTH]: { x: 0, y: 18 },
-    [OrientationId.EAST]: { x: -18, y: 0 },
-    [OrientationId.SOUTH]: { x: 0, y: -18 },
-    [OrientationId.WEST]: { x: 18, y: 0 }
+    [OrientationId.NORTH]: { x: 0, y: 2 },
+    [OrientationId.EAST]: { x: -38, y: 0 },
+    [OrientationId.SOUTH]: { x: 0, y: -38 },
+    [OrientationId.WEST]: { x: 2, y: 0 }
 }
 
 export default function ThreeEdgeRegion({ tileFeature, orientation }: { tileFeature: TileFeature, orientation: Orientation, onClick?: () => void }) {
