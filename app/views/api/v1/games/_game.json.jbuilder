@@ -1,4 +1,4 @@
-json.(game, :id, :started_at)
+json.(game, :id, :started_at, :upcoming_tiles_count)
 
 json.played_tiles(
     game

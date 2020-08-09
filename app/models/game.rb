@@ -57,6 +57,10 @@ class Game < ApplicationRecord
         @available_next_tile_positions ||= unoccupied_played_tile_edges.includes(:tile).map(&:facing_position).uniq
     end
 
+    def upcoming_tiles_count
+        tiles.upcoming.size
+    end
+
     private
 
     def generate!

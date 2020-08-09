@@ -11,6 +11,7 @@ import StartGameButton from './StartGameButton';
 import { FieldRegion, Tile, CityRegion, RoadSegment } from './TileSvg';
 import PlayerList from './PlayerList';
 import { Player } from './Player';
+import pluralize from 'pluralize';
 
 export const CurrentPlayerContext = React.createContext({
     availableNextTilePositions: [],
@@ -39,6 +40,7 @@ export interface Game {
     id: number
     playedTiles: PlayedTile[]
     startedAt: string
+    upcomingTilesCount: number
     turn?: Turn
     players: Player[]
 }
@@ -85,6 +87,7 @@ export default function Game(props: { currentPlayer: CurrentPlayer }) {
     return <CurrentPlayerContext.Provider value={currentPlayer}>
         <div>
             <CurrentPlayerStatus currentPlayer={currentPlayer} />
+            <div>{game.upcomingTilesCount} {pluralize('tile', game.upcomingTilesCount)} remaining</div>
             {
                 gameIsStarted(game) ? (
                     <EndTurnButton game={game} />
